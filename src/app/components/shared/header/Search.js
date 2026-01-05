@@ -1,20 +1,15 @@
-"use client";
-import { useBreakpoint } from "@/app/hooks/useBreakpoint";
 import React from "react";
 
 const Search = () => {
-  const isMobile = useBreakpoint(768);
-
   return (
     <>
       <label
-        className={`input ${isMobile ? "w-[200px] h-10" : "w-[500px] h-15"} flex items-center gap-2 
-          ${
-            isMobile
-              ? "border-2 border-gray-50"
-              : "border-2 border-mainColor focus-within:border-2 focus-within:border-gray-50"
-          }
-      transition-all`}
+        className="
+          input flex items-center gap-2 transition-all
+          w-[200px] h-10 border-2 border-gray-50
+          md:w-[500px] md:h-12 md:border-mainColor 
+          md:focus-within:border-gray-50
+        "
       >
         <svg
           className="h-[1em] opacity-50"
@@ -32,7 +27,7 @@ const Search = () => {
             <path d="m21 21-4.3-4.3"></path>
           </g>
         </svg>
-        <input type="search" required placeholder="Search" />
+        <input type="search" required placeholder="Search" className="grow" />
       </label>
     </>
   );

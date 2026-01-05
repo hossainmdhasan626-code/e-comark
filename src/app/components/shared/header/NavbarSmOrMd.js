@@ -1,19 +1,15 @@
-"use client";
-
 import React from "react";
 import WrapperWithMainColor from "../../ui(reusable)/WrapperWithMainColor";
 import Search from "./Search";
-import { useBreakpoint } from "@/app/hooks/useBreakpoint";
 import Sidbar from "./Sidbar";
 
 const NavbarSmOrMd = () => {
-  const isMobile = useBreakpoint(768);
 
   return (
     <div>
       {/* thisComponentRendardTheSearchBar */}
-      {isMobile ? (
-        // thisWrapperWasJustAColorWrapperWichIsOnliForMdScreen
+      <div className="md:hidden">
+        {/*  thisWrapperWasJustAColorWrapperWichIsOnliForMdScreen */}
         <WrapperWithMainColor>
           {/* inThisWrapperWithMainColorComponentWasForMdScreen */}
           <div className="w-full flex justify-around">
@@ -48,9 +44,11 @@ const NavbarSmOrMd = () => {
             </div>
           </div>
         </WrapperWithMainColor>
-      ) : (
+      </div>
+
+      <div className="hidden md:block">
         <Search />
-      )}
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import Header from "./components/shared/header/Header";
 import Navbar from "./components/shared/navbar/Navbar";
 import SidebarForUpperThanSm from "./components/shared/sidbarForUpperThanSm/SidebarForUpperThanSm";
 import Title from "./components/ui(reusable)/Title";
+import MenuForSm from "./components/shared/menuForSmScreen/MenuForSm";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +24,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     // data-theme="light"
-    <html lang="en"> 
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -31,13 +32,17 @@ export default function RootLayout({ children }) {
           <Header />
           <Navbar />
           <div>
-
-            <Title className={"text-3xl font-semibold text-white ml-[90px] my-5"}>
+            <Title
+              className={"text-3xl font-semibold text-white ml-[90px] my-5 hidden md:block"}
+            >
               Lorem, ipsum.
             </Title>
 
             {/* thisComponetSidbarWasRendarForTheMd/Lg/XlScreen */}
             <SidebarForUpperThanSm />
+
+            {/* thisComponentWasRendarTheMenuItemsForSmScreen */}
+            {/* <MenuForSm/> */}
           </div>
           {children}
         </>

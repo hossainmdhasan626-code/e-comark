@@ -25,9 +25,9 @@ const Sidbar = () => {
               <path
                 fill="currentColor"
                 stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
                 d="M3.75 4v16m4.5-14h12m-12 6h12m-12 6h8.25"
               />
             </svg>
