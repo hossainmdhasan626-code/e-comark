@@ -1,0 +1,67 @@
+"use client";
+
+import React from "react";
+import NavbarAndSidbarSmItems from "../../../../../data/NavbarAndSidbarSmItems";
+import { useBreakpoint } from "@/app/hooks/useBreakpoint";
+
+const SidebarForUpperThanSm = () => {
+  const isMobile = useBreakpoint(768);
+
+  return (
+    <>
+      {" "}
+      {isMobile ? null : ( 
+        <div className="w-[30%] h-screen bg-mainColor overflow-y-auto">
+          <ul className="menu w-full p-4 gap-3">
+            {NavbarAndSidbarSmItems.map((items) => {
+              return items?.children ? (
+                <li key={items.id}>
+                  <details className="group">
+                    <summary
+                      className="btn bg-mainColor text-white border-2 border-white 
+                        hover:bg-[#1a1a1a] transition-all
+                        flex justify-between items-center w-full"
+                    >
+                      {items.name}h
+                    </summary>
+
+                    {/* nestedList */}
+                    <ul
+                      className="mt-2 ml-4 border-l-2 border-white pl-2 flex flex-col 
+                        gap-1"
+                    >
+                      {items.children.map((child) => (
+                        <li key={child?.id}>
+                          <a
+                            className="btn btn-sm border-2 justify-start bg-mainColor
+                              text-white border-white hover:bg-[#1a1a1a]
+                              transition-all w-full"
+                          >
+                            {child?.name}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ) : (
+                <li key={items.id}>
+                  {/* ifTheSidbarWasn'tHaveAnyNestedList */}
+                  <a
+                    className="btn bg-mainColor text-white border-2 border-white 
+                      hover:bg-[#1a1a1a]  transition-all w-full flex 
+                      justify-start items-center min-h-[3rem]"
+                  >
+                    {items.name}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default SidebarForUpperThanSm;

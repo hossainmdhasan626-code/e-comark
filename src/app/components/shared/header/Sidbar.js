@@ -1,4 +1,7 @@
 import React from "react";
+import NavbarAndSidbarSmItems from "../../../../../data/NavbarAndSidbarSmItems";
+
+// thisComponentUiWasOnelyForSmScreen
 
 const Sidbar = () => {
   return (
@@ -36,14 +39,39 @@ const Sidbar = () => {
             aria-label="close sidebar"
             className="drawer-overlay"
           ></label>
-          <ul className="menu bg-base-200 min-h-full w-80 p-4">
-            {/* Sidebar content here */}
-            <li>
-              <a>Sidebar Item 1</a>
-            </li>
-            <li>
-              <a>Sidebar Item 2</a>
-            </li>
+
+          <ul className="menu bg-base-200 min-h-full w-80 p-4 flex flex-col gap-2">
+            {NavbarAndSidbarSmItems.map((item) => {
+              return item?.children ? (
+                <li key={item?.id}>
+                  {/* daisyUI-এর details ট্যাগ ড্রপডাউনকে সুন্দরভাবে নিচের দিকে ঠেলে দেয় */}
+                  <details>
+                    <summary className="btn flex justify-between items-center bg-mainColor border-2 border-white text-white hover:bg-mainColor/90">
+                      {item?.name}
+                      
+                    </summary>
+
+                    {/* চিলড্রেন লিস্ট */}
+                    <ul className="mt-1 flex flex-col gap-1">
+                      {item.children.map((childItem) => (
+                        <li
+                          key={childItem?.id}
+                          className="bg-mainColor text-white rounded-lg border border-white/20"
+                        >
+                          <a>{childItem?.name}</a>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                </li>
+              ) : (
+                <li key={item?.id}>
+                  <button className="btn w-full bg-mainColor border-2 border-white text-white flex justify-start">
+                    {item?.name}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

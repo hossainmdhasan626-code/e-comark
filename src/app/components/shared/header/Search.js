@@ -8,7 +8,7 @@ const Search = () => {
   return (
     <>
       <label
-        className={`input w-56 h-10 flex items-center gap-2 
+        className={`input ${isMobile ? "w-[200px] h-10" : "w-[500px] h-15"} flex items-center gap-2 
           ${
             isMobile
               ? "border-2 border-gray-50"

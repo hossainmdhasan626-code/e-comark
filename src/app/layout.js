@@ -1,6 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/shared/header/Header";
+import Navbar from "./components/shared/navbar/Navbar";
+import SidebarForUpperThanSm from "./components/shared/sidbarForUpperThanSm/SidebarForUpperThanSm";
+import Title from "./components/ui(reusable)/Title";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,12 +22,23 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    // data-theme="light"
+    <html lang="en"> 
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <>
           <Header />
+          <Navbar />
+          <div>
+
+            <Title className={"text-3xl font-semibold text-white ml-[90px] my-5"}>
+              Lorem, ipsum.
+            </Title>
+
+            {/* thisComponetSidbarWasRendarForTheMd/Lg/XlScreen */}
+            <SidebarForUpperThanSm />
+          </div>
           {children}
         </>
       </body>
