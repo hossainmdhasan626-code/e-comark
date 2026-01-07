@@ -13,7 +13,7 @@ import { Pagination, Navigation } from "swiper/modules";
 
 export default function Carousel() {
   return (
-    <div className="hidden md:block h-full">
+    <div className=" h-full">
       <Swiper
         slidesPerView={1}
         spaceBetween={30}
