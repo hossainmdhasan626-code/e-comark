@@ -33,7 +33,7 @@ const Sidbar = () => {
             </svg>
           </label>
         </div>
-        <div className="drawer-side">
+        <div className="drawer-side z-[999]">
           <label
             htmlFor="my-drawer-5"
             aria-label="close sidebar"
@@ -44,14 +44,14 @@ const Sidbar = () => {
             {NavbarAndSidbarSmItems.map((item) => {
               return item?.children ? (
                 <li key={item?.id}>
-                  {/* daisyUI-এর details ট্যাগ ড্রপডাউনকে সুন্দরভাবে নিচের দিকে ঠেলে দেয় */}
+                  {/*  */}
                   <details>
                     <summary className="btn flex justify-between items-center bg-mainColor border-2 border-white text-white hover:bg-mainColor/90">
                       {item?.name}
                       
                     </summary>
 
-                    {/* চিলড্রেন লিস্ট */}
+                    {/* nestedList */}
                     <ul className="mt-1 flex flex-col gap-1">
                       {item.children.map((childItem) => (
                         <li

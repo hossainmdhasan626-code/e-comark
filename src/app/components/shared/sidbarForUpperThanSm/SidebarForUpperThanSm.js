@@ -3,7 +3,7 @@ import NavbarAndSidbarSmItems from "../../../../../data/NavbarAndSidbarSmItems";
 
 const SidebarForUpperThanSm = () => {
   return (
-    <div className="w-[30%] rounded-sm h-screen bg-mainColor overflow-y-auto hidden md:block">
+    <div className="w-full rounded-sm h-screen bg-mainColor overflow-y-auto hidden md:block">
       <ul className="menu w-full p-4 gap-3">
         {NavbarAndSidbarSmItems.map((items) => {
           return items?.children ? (
