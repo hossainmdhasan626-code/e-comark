@@ -9,12 +9,12 @@ const Sidbar = () => {
       <div className="drawer drawer-end">
         <input id="my-drawer-5" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content">
-          {/* Page content here */}
+          {/* drawerButton */}
           <label
             htmlFor="my-drawer-5"
-            className="drawer-button btn bg-mainColor border-mainColor"
+            className="drawer-button btn bg-mainColor border-2 border-white hover:bg-[#1a1a1a] transition-all"
           >
-            {/* rendarTheSidbarIcon */}
+            {/* sidbarIcon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="35"
@@ -33,6 +33,7 @@ const Sidbar = () => {
             </svg>
           </label>
         </div>
+
         <div className="drawer-side z-[999]">
           <label
             htmlFor="my-drawer-5"
@@ -40,25 +41,23 @@ const Sidbar = () => {
             className="drawer-overlay"
           ></label>
 
-          <ul className="menu bg-base-200 min-h-full w-80 p-4 flex flex-col gap-2">
+          {/* drawerMenuContent */}
+          <ul className="menu bg-mainColor min-h-full w-80 p-4 flex flex-col gap-3 text-white">
             {NavbarAndSidbarSmItems.map((item) => {
               return item?.children ? (
                 <li key={item?.id}>
-                  {/*  */}
                   <details>
-                    <summary className="btn flex justify-between items-center bg-mainColor border-2 border-white text-white hover:bg-mainColor/90">
+                    <summary className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all flex justify-between items-center w-full after:text-white">
                       {item?.name}
-                      
                     </summary>
 
-                    {/* nestedList */}
-                    <ul className="mt-1 flex flex-col gap-1">
+                    {/* SubMenu */}
+                    <ul className="mt-2 ml-4 border-l-2 border-white pl-2 flex flex-col gap-2">
                       {item.children.map((childItem) => (
-                        <li
-                          key={childItem?.id}
-                          className="bg-mainColor text-white rounded-lg border border-white/20"
-                        >
-                          <a>{childItem?.name}</a>
+                        <li key={childItem?.id}>
+                          <a className="btn btn-sm border-2 justify-start bg-mainColor text-white border-white hover:bg-[#1a1a1a] transition-all w-full">
+                            {childItem?.name}
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -66,9 +65,9 @@ const Sidbar = () => {
                 </li>
               ) : (
                 <li key={item?.id}>
-                  <button className="btn w-full bg-mainColor border-2 border-white text-white flex justify-start">
+                  <a className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all w-full flex justify-start items-center min-h-[3rem]">
                     {item?.name}
-                  </button>
+                  </a>
                 </li>
               );
             })}

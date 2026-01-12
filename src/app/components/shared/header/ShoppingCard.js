@@ -7,7 +7,8 @@ const ShoppingCard = () => {
         <div
           tabIndex={0}
           role="button"
-          className="btn m-1 bg-mainColor text-white"
+          /* এখানে border-2 এবং border-white যোগ করা হয়েছে */
+          className="btn m-1 bg-mainColor text-white border-2 border-white hover:bg-[#1a1a1a] transition-all"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -22,15 +23,16 @@ const ShoppingCard = () => {
           </svg>
         </div>
         <ul
-          tabIndex="-1"
-          className="dropdown-content menu bg-mainColor rounded-box z-1 w-52 p-2 
-          shadow-sm text-white"
+          tabIndex={0}
+          /* dropdown-content এর ডিজাইনে বর্ডার এবং ড্রপডাউন পজিশন ঠিক করা হয়েছে */
+          className="dropdown-content menu bg-mainColor rounded-box z-[10] w-52 p-2 
+          shadow-lg text-white border-2 border-white mt-2"
         >
-          <li className="hover:bg-base-100 rounded-lg">
-            <a>Item 1</a>
+          <li className="hover:bg-[#1a1a1a] rounded-lg transition-all">
+            <a className="text-white">Item 1</a>
           </li>
-          <li>
-            <a>Item 2</a>
+          <li className="hover:bg-[#1a1a1a] rounded-lg transition-all">
+            <a className="text-white">Item 2</a>
           </li>
         </ul>
       </div>
