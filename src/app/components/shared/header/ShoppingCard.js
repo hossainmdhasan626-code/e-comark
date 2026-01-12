@@ -3,7 +3,7 @@ import React from "react";
 const ShoppingCard = () => {
   return (
     <>
-      <div className="dropdown hidden md:block">
+      <div className="dropdown hidden md:block dropdown-end">
         <div
           tabIndex={0}
           role="button"
