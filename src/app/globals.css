@@ -7,3 +7,15 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+/* forHideTheNavbarScrollbarInTheMdScreen */
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;  
+    scrollbar-width: none; 
+  }
+}
