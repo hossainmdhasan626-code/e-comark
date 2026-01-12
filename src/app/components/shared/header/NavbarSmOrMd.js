@@ -4,7 +4,6 @@ import Search from "./Search";
 import Sidbar from "./Sidbar";
 
 const NavbarSmOrMd = () => {
-
   return (
     <div>
       {/* thisComponentRendardTheSearchBar */}
@@ -25,7 +24,7 @@ const NavbarSmOrMd = () => {
               <label
                 //   iCanCreatTheProfilePageAFullySeparatedPageOrShowThadOnTheSidbarLikeNow
                 htmlFor="my-drawer-5"
-                className="drawer-button btn bg-mainColor border-mainColor"
+                className="drawer-button btn bg-mainColor border-mainColor hover:bg-[#1a1a1a]"
               >
                 {/* rendarTheProfileLogo */}
                 <svg

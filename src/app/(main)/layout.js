@@ -20,7 +20,7 @@ const layout = ({ children }) => {
           {/* thisComponetSidbarWasRendarForTheMd/Lg/XlScreen */}
           <SidebarForUpperThanSm />
         </div>
-        <div className="md:w-[60%]">{children}</div>
+        <div className="md:w-[70%]">{children}</div>
       </div>
       {/* footer */}
       <FooterComponent/>

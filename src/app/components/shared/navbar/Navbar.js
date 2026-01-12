@@ -98,7 +98,7 @@ const Navbar = () => {
           </div>
 
           {/* Nav Items */}
-          <ul className="menu menu-horizontal gap-3 p-0 flex-wrap">
+          <ul className="menu menu-horizontal gap-3 p-0 flex-wrap max-w-full">
             {NavbarAndSidbarSmItems.map((item) => {
               return item?.children ? (
                 <li key={item?.id}>
