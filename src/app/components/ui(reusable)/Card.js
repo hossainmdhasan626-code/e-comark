@@ -21,7 +21,7 @@ const Card = ({ item }) => {
           </p>
 
           <div className="card-actions justify-end mt-4">
-            <button className="btn btn-primary btn-sm px-6">Buy Now</button>
+            <button className="btn btn-primary btn-sm px-6">Add to card</button>
           </div>
         </div>
       </div>

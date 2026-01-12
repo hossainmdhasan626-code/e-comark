@@ -10,7 +10,7 @@ const layout = ({ children }) => {
       <Header />
       <Navbar />
       <div className="md:flex">
-        <div className="md:w-[35%]">
+        <div className="md:w-[30%]">
           <Title
             className={
               "text-3xl font-semibold text-white ml-[90px] my-5 hidden md:block"
@@ -25,7 +25,7 @@ const layout = ({ children }) => {
           {/* thisComponentWasRendarTheMenuItemsForSmScreen */}
           <MenuForSm />
         </div>
-        <div className="md:w-[65%]">{children}</div>
+        <div className="md:w-[60%]">{children}</div>
       </div>
     </>
   );
