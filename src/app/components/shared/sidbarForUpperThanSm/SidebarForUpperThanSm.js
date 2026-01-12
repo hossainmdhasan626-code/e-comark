@@ -8,21 +8,17 @@ const SidebarForUpperThanSm = () => {
         {NavbarAndSidbarSmItems.map((items) => {
           return items?.children ? (
             <li key={items.id}>
-              <details className="group">
-                {/* thisSummaryWasMainlyRendarTheNestedListLable */}
+              {/* DaisyUI Collapsible Menu using <details> */}
+              <details>
                 <summary
                   className="btn bg-mainColor text-white border-2 border-white 
                         hover:bg-[#1a1a1a] transition-all
-                        flex justify-between items-center w-full"
+                        flex justify-between items-center w-full after:text-white"
                 >
                   {items.name}
                 </summary>
 
-                {/* nestedList */}
-                <ul
-                  className="mt-2 ml-4 border-l-2 border-white pl-2 flex flex-col 
-                        gap-1"
-                >
+                <ul className="mt-2 ml-4 border-l-2 border-white pl-2 flex flex-col gap-1">
                   {items.children.map((child) => (
                     <li key={child?.id}>
                       <a
@@ -39,10 +35,9 @@ const SidebarForUpperThanSm = () => {
             </li>
           ) : (
             <li key={items.id}>
-              {/* ifTheSidbarWasn'tHaveAnyNestedList */}
               <a
                 className="btn bg-mainColor text-white border-2 border-white 
-                      hover:bg-[#1a1a1a]  transition-all w-full flex 
+                      hover:bg-[#1a1a1a] transition-all w-full flex 
                       justify-start items-center min-h-[3rem]"
               >
                 {items.name}
