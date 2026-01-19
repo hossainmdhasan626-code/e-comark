@@ -1,7 +1,7 @@
 import React from "react";
 import WrapperWithMainColor from "../../ui(reusable)/WrapperWithMainColor";
-import Search from "./Search";
-import Sidbar from "./Sidbar";
+import Search from "../header/Search";
+import Sidbar from "../header/Sidbar";
 
 const NavbarSmOrMd = () => {
   return (
@@ -22,7 +22,7 @@ const NavbarSmOrMd = () => {
 
             <div>
               <label
-                //   iCanCreatTheProfilePageAFullySeparatedPageOrShowThadOnTheSidbarLikeNow
+            
                 htmlFor="my-drawer-5"
                 className="drawer-button btn bg-mainColor border-mainColor hover:bg-[#1a1a1a]"
               >
