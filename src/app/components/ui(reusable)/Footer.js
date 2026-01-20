@@ -1,5 +1,5 @@
 import React from "react";
-import footerData from "../../../../../data/FooterData";
+import footerData from "../../../../data/FooterData";
 
 const FooterComponent = () => {
   return (

@@ -1,4 +1,4 @@
-import FooterComponent from "../components/shared/footer/Footer";
+import FooterComponent from "../components/ui(reusable)/Footer";
 import Header from "../components/shared/header/Header";
 import Navbar from "../components/shared/navbar/Navbar";
 import SidebarForUpperThanSm from "../components/shared/sidbarForUpperThanSm/SidebarForUpperThanSm";
