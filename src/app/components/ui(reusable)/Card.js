@@ -1,13 +1,24 @@
 import React from "react";
+import Image from "next/image";
 
 const Card = ({ item }) => {
   return (
     <div className="w-fullmax-w-[360px] transition-all hover:shadow-md">
       <div className="card bg-base-100 shadow-sm border border-gray-100 overflow-hidden">
-        <figure className="bg-gray-200 h-48 w-full flex items-center justify-center">
-          <span className="text-gray-500 font-bold text-2xl tracking-widest uppercase">
-            Card
-          </span>
+        <figure className="bg-gray-200 h-48 w-full flex items-center justify-center relative overflow-hidden">
+          {item?.image ? (
+            <Image
+              src={item.image}
+              alt={item?.title || "Product image"}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
+          ) : (
+            <span className="text-gray-500 font-bold text-2xl tracking-widest uppercase">
+              Card
+            </span>
+          )}
         </figure>
 
         <div className="card-body p-5">
