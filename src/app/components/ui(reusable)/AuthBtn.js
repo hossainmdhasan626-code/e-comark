@@ -3,7 +3,7 @@
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
-const CardBtn = () => {
+const AuthBtn = () => {
 
   const user = useSelector((state) => state.auth);
   const router = useRouter();
@@ -24,4 +24,4 @@ const CardBtn = () => {
   );
 };
 
-export default CardBtn;
+export default AuthBtn;

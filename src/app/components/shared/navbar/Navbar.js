@@ -1,7 +1,6 @@
 import WrapperWithMainColor from "../../ui(reusable)/WrapperWithMainColor";
-import NavbarAndSidbarSmItems from "../../../../../data/NavbarAndSidbarSmItems";
 
-const Navbar = () => {
+const Navbar = ({ navbarItems }) => {
   return (
     // eiNavbarTaDefaultSmScreeneDekhaJabeSuduMdTeiDekhaJave
     <div className="hidden md:block">
@@ -30,7 +29,7 @@ const Navbar = () => {
 
           {/* Nav Items */}
           <ul className="menu menu-horizontal gap-3 p-0 flex-wrap max-w-full">
-            {NavbarAndSidbarSmItems.map((item) => {
+            {navbarItems.map((item) => {
               return item?.children ? (
                 <li key={item?.id}>
                   <details className="dropdown">

@@ -1,5 +1,4 @@
-import React from "react";
-import CardBtn from "./CardBtn";
+import AuthBtn from "./AuthBtn";
 
 const Card = ({ item }) => {
   return (
@@ -22,7 +21,7 @@ const Card = ({ item }) => {
           </p>
 
           <div className="card-actions justify-end mt-4">
-            <CardBtn />
+            <AuthBtn />
           </div>
         </div>
       </div>

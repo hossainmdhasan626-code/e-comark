@@ -1,29 +1,24 @@
 import FooterComponent from "../components/ui(reusable)/Footer";
 import Header from "../components/shared/header/Header";
 import Navbar from "../components/shared/navbar/Navbar";
-import SidebarForUpperThanSm from "../components/shared/sidbarForUpperThanSm/SidebarForUpperThanSm";
-import Title from "../components/ui(reusable)/Title";
+import NavbarAndSidbarSmItems from "../../../data/NavbarAndSidbarSmItems";
+import SidbarForSm from "../../../data/SidbarForSm";
+import SidbarAndMainContaint from "../components/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaint";
 
 const layout = ({ children }) => {
   return (
     <>
       <Header />
-      <Navbar />
-      <div className="md:flex">
-        <div className="md:w-[30%]">
-          <Title
-            className={"text-3xl font-semibold ml-[90px] my-5 hidden md:block"}
-          >
-            Lorem, ipsum.
-          </Title>
-
-          {/* thisComponetSidbarWasRendarForTheMd/Lg/XlScreen */}
-          <SidebarForUpperThanSm />
-        </div>
-        <div className="md:w-[70%]">{children}</div>
-      </div>
+      <Navbar navbarItems={NavbarAndSidbarSmItems} />
+      {/* sidbarAndMainContaintErModdeiMainContaintBaChildrenJacche
+      KenoNaEiLayoutTaAroOnekSthaneiUseKoraHobe */}
+      <SidbarAndMainContaint
+        title={"Lorem, ipsum dolor."}
+        sidbarContaint={SidbarForSm}
+        mainContaint={children}
+      />
       {/* footer */}
-      <FooterComponent/>
+      <FooterComponent />
     </>
   );
 };

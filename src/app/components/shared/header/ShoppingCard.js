@@ -1,8 +1,9 @@
+import Link from "next/link";
 import ButtonWrapper from "../../ui(reusable)/ButtonWrapper";
 
 const ShoppingCard = () => {
   return (
-    <>
+    <Link href="/addToCard">
       <ButtonWrapper>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +17,7 @@ const ShoppingCard = () => {
           />
         </svg>
       </ButtonWrapper>
-    </>
+    </Link>
   );
 };
 
