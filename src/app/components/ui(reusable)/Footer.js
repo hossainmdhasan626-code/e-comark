@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import footerData from "../../../../../data/FooterData";
+import footerData from "../../../../data/FooterData";
 
 const FooterComponent = () => {
   const [email, setEmail] = useState("");
