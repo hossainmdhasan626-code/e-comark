@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import AuthBtn from "./AuthBtn";
 
 const Card = ({ item }) => {
   return (
@@ -32,7 +33,7 @@ const Card = ({ item }) => {
           </p>
 
           <div className="card-actions justify-end mt-4">
-            <button className="btn btn-primary btn-sm px-6">Add to card</button>
+            <AuthBtn />
           </div>
         </div>
       </div>
