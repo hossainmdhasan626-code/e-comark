@@ -3,22 +3,22 @@
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
-const AuthBtn = () => {
+const AuthBtn = ({children,className,routhName}) => {
 
   const user = useSelector((state) => state.auth);
   const router = useRouter();
 
   const onClick = () => {
     if (!user?.fullName) {
-      router.push("signup");
+      router.push("signin");
     } else {
-      console.log("Card Details");
+      router.push(routhName);
     }
   };
   return (
     <div>
-      <button onClick={onClick} className="btn btn-primary btn-sm px-6">
-        Add to card
+      <button onClick={onClick} className={`${className}`}>
+        {children}
       </button>
     </div>
   );
