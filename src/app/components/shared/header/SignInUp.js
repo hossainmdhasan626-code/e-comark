@@ -8,9 +8,6 @@ const SignInOut = () => {
         <Link href="/signin">
         <ButtonWrapper>SignIn</ButtonWrapper>
         </Link>
-        <Link href="/signup">
-          <ButtonWrapper>SignUP</ButtonWrapper>
-        </Link>
       </div>
     </>
   );
