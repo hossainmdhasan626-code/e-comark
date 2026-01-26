@@ -11,7 +11,10 @@ const layout = ({ children }) => {
       <ProfileNavbar />
       {/* eiComponentTaMulotoEktaLaoutDibeJetaSidebarArMainContaintKeRendarKorbe */}
       <SidbarAndMainContaint
-        title={"lorem"}
+        title={[
+          { label: "Home", link: "/" },
+          { label: "My Account", link: null },
+        ]}
         mainContaint={children}
         sidbarContaint={profileSidebar}
       />
