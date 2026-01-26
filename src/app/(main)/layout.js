@@ -13,7 +13,10 @@ const layout = ({ children }) => {
       {/* sidbarAndMainContaintErModdeiMainContaintBaChildrenJacche
       KenoNaEiLayoutTaAroOnekSthaneiUseKoraHobe */}
       <SidbarAndMainContaint
-        title={"Lorem, ipsum dolor."}
+        title={[
+          { label: "Home", link: "/" },
+          { label: "Categories", link: null },
+        ]}
         sidbarContaint={SidbarForSm}
         mainContaint={children}
       />

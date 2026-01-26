@@ -31,11 +31,56 @@ const SidbarAndMainContaint = ({ title, sidbarContaint, mainContaint }) => {
   return (
     <div className="md:flex">
       <div className="md:w-[30%]">
-        <Title
-          className={"text-3xl font-semibold ml-[90px] my-5 hidden md:block"}
-        >
-          {title}
-        </Title>
+        {/* Breadcrumbs */}
+        <div className="ml-[90px] my-5 hidden md:block">
+          <div className="breadcrumbs text-sm">
+            <ul>
+              {title?.map((breadcrumb, index) => (
+                <li key={index}>
+                  {breadcrumb.link ? (
+                    <a href={breadcrumb.link} className="hover:text-mainColor transition-colors duration-200">
+                      {breadcrumb.icon && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          className="w-4 h-4 mr-2 stroke-current"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d={breadcrumb.icon}
+                          />
+                        </svg>
+                      )}
+                      {breadcrumb.label}
+                    </a>
+                  ) : (
+                    <span className="font-semibold text-gray-700 dark:text-gray-200">
+                      {breadcrumb.icon && (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          className="w-4 h-4 mr-2 stroke-current"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d={breadcrumb.icon}
+                          />
+                        </svg>
+                      )}
+                      {breadcrumb.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
         {/* thisComponetSidbarWasRendarForTheMd/Lg/XlScreen */}
         <SidebarForUpperThanSm
