@@ -19,7 +19,7 @@ const SidbarAndMainContaint = ({ title, sidbarContaint, mainContaint }) => {
     if (item.type === "PROFILE_TAB") {
       router.push(`?PROFILE_TAB=${item?.name}`);
       console.log(`State was set: ${item.name}`);
-    }
+    };
 
     if (item.type === "CATEGORY") {
       console.log(`query was createed: ${item.name}`);
