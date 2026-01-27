@@ -1,5 +1,6 @@
 import CardData from "../../../data/CardData";
 import Carousel from "../components/shared/carousel/Carousel";
+import CartRendar from "../components/shared/cart/CartRendar";
 import Card from "../components/ui(reusable)/Card";
 
 export default function Home() {
@@ -8,10 +9,9 @@ export default function Home() {
       <div className="my-5 h-[30vh] mb-10">
         <Carousel />
       </div>
-      <div className="grid justify-center items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {CardData?.map((item) => {
-          return <Card key={item?.id} item={item} />;
-        })}
+      {/* landingPageCart */}
+      <div>
+        <CartRendar />
       </div>
     </div>
   );

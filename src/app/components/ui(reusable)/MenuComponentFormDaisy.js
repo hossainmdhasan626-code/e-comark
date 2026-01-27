@@ -1,6 +1,6 @@
 import React from "react";
 
-const MenuComponentFormDaisy = ({ itemsRendard }) => {
+const MenuComponentFormDaisy = ({ itemsRendard, onItemClick }) => {
   return (
     <>
       <ul className="menu w-full p-4 gap-3">
@@ -24,6 +24,7 @@ const MenuComponentFormDaisy = ({ itemsRendard }) => {
                         className="btn btn-sm border-2 justify-start bg-mainColor
                               text-white border-white hover:bg-[#1a1a1a]
                               transition-all w-full"
+                        onClick={() => onItemClick(items)}
                       >
                         {child?.name}
                       </a>
@@ -33,14 +34,15 @@ const MenuComponentFormDaisy = ({ itemsRendard }) => {
               </details>
             </li>
           ) : (
-            <li key={items.id}>
-              <a
+            <li key={items?.id}>
+              <p
                 className="btn bg-mainColor text-white border-2 border-white 
                       hover:bg-[#1a1a1a] transition-all w-full flex 
                       justify-start items-center min-h-[3rem]"
+                onClick={() => onItemClick(items)}
               >
-                {items.name}
-              </a>
+                {items?.name}
+              </p>
             </li>
           );
         })}

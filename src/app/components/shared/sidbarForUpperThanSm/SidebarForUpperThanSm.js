@@ -1,11 +1,14 @@
-import React from "react";
-import MenuComponentFormDaisy from "../../ui(reusable)/MenuComponentFormDaisy";
-import SidbarForSm from "../../../../../data/SidbarForSm";
+"use client";
 
-const SidebarForUpperThanSm = () => {
+import MenuComponentFormDaisy from "../../ui(reusable)/MenuComponentFormDaisy";
+
+const SidebarForUpperThanSm = ({ sidbarContaint, onItemClick }) => {
   return (
     <div className="w-full rounded-sm h-screen bg-mainColor overflow-y-auto hidden md:block">
-      <MenuComponentFormDaisy itemsRendard={SidbarForSm} />
+      <MenuComponentFormDaisy
+        itemsRendard={sidbarContaint}
+        onItemClick={onItemClick}
+      />
     </div>
   );
 };
