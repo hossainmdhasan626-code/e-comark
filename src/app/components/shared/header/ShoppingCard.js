@@ -4,8 +4,8 @@ import AuthBtn from "../../ui(reusable)/AuthBtn";
 
 const ShoppingCard = () => {
   return (
-    <AuthBtn routhName={"/addToCard"}>
-      <Link href="/addToCard">
+    <AuthBtn>
+      <Link href="/profile?PROFILE_TAB=SAVED%20CARTS">
         <ButtonWrapper>
           <svg
             xmlns="http://www.w3.org/2000/svg"

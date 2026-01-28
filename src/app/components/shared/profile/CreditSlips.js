@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 const CreditSlips = () => {
   const [creditSlips] = useState([
@@ -51,12 +52,13 @@ const CreditSlips = () => {
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          CREDIT SLIPS
-        </h2>
-        <p className="text-gray-600 mt-4">
-          Credit slips you have received after returns or cancellations.
-        </p>
+        {/* mainContaintETitleRendarKore */}
+        <Title
+          titleOne={"CREDIT SLIPS"}
+          titleTwo={
+            "Credit slips you have received after returns or cancellations."
+          }
+        />
       </div>
 
       {/* Credit Slips List */}
@@ -118,7 +120,7 @@ const CreditSlips = () => {
                       <td className="px-6 py-4">
                         <span
                           className={`inline-block px-3 py-1 text-xs font-bold rounded-full border ${getStatusColor(
-                            slip.statusColor
+                            slip.statusColor,
                           )}`}
                         >
                           {slip.status}
@@ -177,7 +179,7 @@ const CreditSlips = () => {
                   </div>
                   <span
                     className={`px-3 py-1 text-xs font-bold rounded-full border ${getStatusColor(
-                      slip.statusColor
+                      slip.statusColor,
                     )}`}
                   >
                     {slip.status}
@@ -289,7 +291,7 @@ const CreditSlips = () => {
                     .reduce(
                       (total, slip) =>
                         total + parseFloat(slip.amount.replace("$", "")),
-                      0
+                      0,
                     )
                     .toFixed(2)}
                 </p>

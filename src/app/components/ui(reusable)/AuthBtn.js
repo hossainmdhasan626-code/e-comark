@@ -17,9 +17,9 @@ const AuthBtn = ({children,className,routhName}) => {
   };
   return (
     <div>
-      <button onClick={onClick} className={`${className}`}>
+      <div onClick={onClick} className={`${className}`}>
         {children}
-      </button>
+      </div>
     </div>
   );
 };

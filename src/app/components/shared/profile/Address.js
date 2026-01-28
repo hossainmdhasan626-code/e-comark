@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 // Validation Schema
 const addressSchema = Yup.object({
@@ -63,8 +64,8 @@ const Address = () => {
           addresses.map((addr) =>
             addr.id === editingAddress.id
               ? { ...values, id: addr.id, isDefault: addr.isDefault }
-              : addr
-          )
+              : addr,
+          ),
         );
         setEditingAddress(null);
       } else {
@@ -98,7 +99,7 @@ const Address = () => {
       addresses.map((addr) => ({
         ...addr,
         isDefault: addr.id === id,
-      }))
+      })),
     );
   };
 
@@ -111,9 +112,8 @@ const Address = () => {
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8 flex justify-between items-center">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          YOUR ADDRESSES
-        </h2>
+        {/* mainContaintETitleRendarKore */}
+        <Title titleOne={"YOUR ADDRESSES"} />
         {!isFormVisible && (
           <button
             onClick={() => setIsFormVisible(true)}
@@ -506,7 +506,8 @@ const Address = () => {
                 </p>
                 {address.phone && (
                   <p>
-                    <span className="font-semibold">Phone:</span> {address.phone}
+                    <span className="font-semibold">Phone:</span>{" "}
+                    {address.phone}
                   </p>
                 )}
               </div>

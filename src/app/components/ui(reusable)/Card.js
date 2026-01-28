@@ -36,9 +36,9 @@ const Card = ({ item }) => {
           <div className="card-actions justify-end mt-4">
             <AuthBtn
               className={"btn btn-primary btn-sm px-6"}
-              routhName={"/addToCard"}
+              routhName={"/profile?PROFILE_TAB=SAVED%20CARTS"}
             >
-              <Link href={"/addToCard"}>Add to card</Link>
+              <Link href={"/profile?PROFILE_TAB=SAVED%20CARTS"}>Add to card</Link>
             </AuthBtn>
           </div>
         </div>

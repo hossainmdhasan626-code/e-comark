@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 const SavedCarts = () => {
   const [cartItems, setCartItems] = useState([
@@ -30,14 +31,13 @@ const SavedCarts = () => {
     },
   ]);
 
-
   const handleUpdateQuantity = (itemId, delta) => {
     setCartItems(
       cartItems.map((item) =>
         item.id === itemId
           ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item
-      )
+          : item,
+      ),
     );
   };
 
@@ -57,20 +57,20 @@ const SavedCarts = () => {
 
   const totalAmount = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
 
   return (
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          SAVED CART
-        </h2>
-        <p className="text-gray-600 mt-4">
-          Manage your saved shopping cart. Add items to your active cart or continue
-          shopping.
-        </p>
+        {/* mainContaintErTitleRendar */}
+        <Title
+          titleOne={"SAVED CART"}
+          titleTwo={
+            "Manage your saved shopping cart. Add items to your active cart or continue shopping."
+          }
+        />
       </div>
 
       {/* Cart Content */}
@@ -108,7 +108,9 @@ const SavedCarts = () => {
 
                     {/* Product Details */}
                     <div className="flex-1">
-                      <h5 className="font-bold text-gray-900 mb-2">{item.name}</h5>
+                      <h5 className="font-bold text-gray-900 mb-2">
+                        {item.name}
+                      </h5>
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-lg font-bold text-mainColor">
                           BDT {item.price}
@@ -303,7 +305,9 @@ const SavedCarts = () => {
               d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
             />
           </svg>
-          <p className="text-gray-600 text-lg font-semibold">Your saved cart is empty</p>
+          <p className="text-gray-600 text-lg font-semibold">
+            Your saved cart is empty
+          </p>
           <p className="text-gray-500 mt-2 mb-4">
             Add items to your cart and save it for later
           </p>

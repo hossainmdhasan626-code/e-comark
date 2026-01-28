@@ -1,29 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
+import { profileInformationSchema } from "../forms/schema/ProfileInformationSchema";
 
 const Information = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
-
-  const validationSchema = Yup.object({
-    socialTitle: Yup.string().required("Social title is required"),
-    firstName: Yup.string()
-      .min(2, "First name must be at least 2 characters")
-      .required("First name is required"),
-    lastName: Yup.string()
-      .min(2, "Last name must be at least 2 characters")
-      .required("Last name is required"),
-    email: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string().required("Password is required"),
-    newPassword: Yup.string().min(8, "Password must be at least 8 characters"),
-    birthDate: Yup.string(),
-  });
 
   const initialValues = {
     socialTitle: "Md",
@@ -47,7 +32,7 @@ const Information = () => {
     <div className="px-4 md:px-0 bg-white">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        validationSchema={profileInformationSchema}
         onSubmit={handleSubmit}
         validateOnChange={false}
         validateOnBlur={false}
@@ -56,9 +41,8 @@ const Information = () => {
           <Form className="space-y-6">
             {/* Section Title */}
             <div className="mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-                YOUR PERSONAL INFORMATION
-              </h2>
+              {/* mainContaintErTitleRendarKore */}
+              <Title titleOne={"YOUR PERSONAL INFORMATION"} />
             </div>
 
             {/* Main Container */}
@@ -207,9 +191,7 @@ const Information = () => {
                         {showNewPassword ? "HIDE" : "SHOW"}
                       </button>
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">
-                      Optional
-                    </p>
+                    <p className="text-sm text-gray-600 mt-2">Optional</p>
                   </div>
                 </div>
 
@@ -228,9 +210,7 @@ const Information = () => {
                     <p className="text-sm text-gray-600 mt-2">
                       (E.g. 31/05/1970)
                     </p>
-                    <p className="text-sm text-gray-600">
-                      Optional
-                    </p>
+                    <p className="text-sm text-gray-600">Optional</p>
                     <ErrorMessage
                       name="birthDate"
                       component="p"
