@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import Title from "../../ui(reusable)/Title";
-import { profileInformationSchema } from "../forms/schema/ProfileInformationSchema";
+import { profileInformationSchema } from "../forms/schema/profilePageSchemas/ProfileInformationSchema";
 
 const Information = () => {
   const [showPassword, setShowPassword] = useState(false);
