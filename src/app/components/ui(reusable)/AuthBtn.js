@@ -10,7 +10,7 @@ const AuthBtn = ({children,className,routhName}) => {
 
   const onClick = () => {
     if (!user?.fullName) {
-      router.push("signin");
+      router.push("/signin");
     } else {
       router.push(routhName);
     }

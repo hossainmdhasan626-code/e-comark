@@ -8,6 +8,7 @@ const Card = ({ item }) => {
     <div className="w-fullmax-w-[360px] transition-all hover:shadow-md">
       <div className="card bg-base-100 shadow-sm border border-gray-100 overflow-hidden">
         <figure className="bg-gray-200 h-48 w-full flex items-center justify-center relative overflow-hidden">
+          <Link href={`productDetails/${item?.id}`}>
           {item?.image ? (
             <Image
               src={item.image}
@@ -21,6 +22,7 @@ const Card = ({ item }) => {
               Card
             </span>
           )}
+          </Link>
         </figure>
 
         <div className="card-body p-5">
