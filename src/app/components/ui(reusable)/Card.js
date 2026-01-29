@@ -2,25 +2,42 @@ import React from "react";
 import Image from "next/image";
 import AuthBtn from "./AuthBtn";
 import Link from "next/link";
+import { useAddToCartMutation } from "@/app/redux/api/cart/AddtoCartApi";
 
 const Card = ({ item }) => {
+  const [addToCart, { isLoading }] = useAddToCartMutation();
+
+  const handleAddToCart = async () => {
+    try {
+      // addToCartApiTeCartErDataPathaccheJateAddToCartSectionKe
+      // UpdatedKortePare
+      await addToCart(item).unwrap();
+      alert("add to cart");
+    } catch (error) {
+      console.error("Failed to add:", error);
+      alert("Something went wrong!");
+    }
+  };
+
   return (
     <div className="w-fullmax-w-[360px] transition-all hover:shadow-md">
       <div className="card bg-base-100 shadow-sm border border-gray-100 overflow-hidden">
         <figure className="bg-gray-200 h-48 w-full flex items-center justify-center relative overflow-hidden">
-          {item?.image ? (
-            <Image
-              src={item.image}
-              alt={item?.title || "Product image"}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-          ) : (
-            <span className="text-gray-500 font-bold text-2xl tracking-widest uppercase">
-              Card
-            </span>
-          )}
+          <Link href={`productDetails/${item?.id}`}>
+            {item?.image ? (
+              <Image
+                src={item.image}
+                alt={item?.title || "Product image"}
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            ) : (
+              <span className="text-gray-500 font-bold text-2xl tracking-widest uppercase">
+                Card
+              </span>
+            )}
+          </Link>
         </figure>
 
         <div className="card-body p-5">
@@ -36,9 +53,10 @@ const Card = ({ item }) => {
           <div className="card-actions justify-end mt-4">
             <AuthBtn
               className={"btn btn-primary btn-sm px-6"}
-              routhName={"/addToCard"}
+              onClickAction={handleAddToCart}
+              // routhName={"/profile?PROFILE_TAB=SAVED%20CARTS"}
             >
-              <Link href={"/addToCard"}>Add to card</Link>
+              {isLoading ? "Adding..." : "Add to card"}
             </AuthBtn>
           </div>
         </div>
