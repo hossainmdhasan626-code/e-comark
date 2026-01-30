@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 const Vouchers = () => {
   const [vouchers] = useState([
@@ -81,12 +82,13 @@ const Vouchers = () => {
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          MY VOUCHERS
-        </h2>
-        <p className="text-gray-600 mt-4">
-          View and manage your discount vouchers and promotional codes.
-        </p>
+        {/* mainContaintErTitleRendar */}
+        <Title
+          titleOne={"MY VOUCHERS"}
+          titleTwo={
+            "View and manage your discount vouchers and promotional codes."
+          }
+        />
       </div>
 
       {/* Vouchers List */}
@@ -188,7 +190,7 @@ const Vouchers = () => {
                       <td className="px-6 py-4">
                         <span
                           className={`inline-block px-3 py-1 text-xs font-bold rounded-full border ${getStatusColor(
-                            voucher.statusColor
+                            voucher.statusColor,
                           )}`}
                         >
                           {voucher.status}
@@ -270,7 +272,7 @@ const Vouchers = () => {
                   </div>
                   <span
                     className={`px-3 py-1 text-xs font-bold rounded-full border ${getStatusColor(
-                      voucher.statusColor
+                      voucher.statusColor,
                     )}`}
                   >
                     {voucher.status}
@@ -344,9 +346,7 @@ const Vouchers = () => {
                 </h3>
                 <ul className="text-gray-700 text-sm space-y-1 leading-relaxed">
                   <li>• Copy the voucher code by clicking the copy icon</li>
-                  <li>
-                    • Add items to your cart and proceed to checkout
-                  </li>
+                  <li>• Add items to your cart and proceed to checkout</li>
                   <li>
                     • Enter the voucher code in the discount field at checkout
                   </li>
@@ -354,9 +354,7 @@ const Vouchers = () => {
                     • The discount will be applied automatically if all
                     conditions are met
                   </li>
-                  <li>
-                    • Only one voucher can be used per order
-                  </li>
+                  <li>• Only one voucher can be used per order</li>
                 </ul>
               </div>
             </div>
@@ -385,7 +383,7 @@ const Vouchers = () => {
                 <p className="text-3xl font-bold text-red-600 mb-2">
                   {
                     vouchers.filter(
-                      (v) => v.status === "Expired" || v.status === "Used"
+                      (v) => v.status === "Expired" || v.status === "Used",
                     ).length
                   }
                 </p>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo } from "react";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 const MyLoyaltyPoints = () => {
   const summary = {
@@ -57,7 +58,7 @@ const MyLoyaltyPoints = () => {
         status: "Confirmed",
       },
     ],
-    []
+    [],
   );
 
   const rewards = [
@@ -77,13 +78,13 @@ const MyLoyaltyPoints = () => {
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          MY LOYALTY POINTS
-        </h2>
-        <p className="text-gray-600 mt-4">
-          Track your points, tier status, and redeem rewards directly from your
-          account.
-        </p>
+        {/* mainContaintErTaitelRendarKore */}
+        <Title
+          titleOne={"MY LOYALTY POINTS"}
+          titleTwo={
+            "Track your points, tier status, and redeem rewards directly from your account."
+          }
+        />
       </div>
 
       {/* Top Summary Cards */}
@@ -176,7 +177,9 @@ const MyLoyaltyPoints = () => {
       <div className="bg-white border-2 border-gray-200 rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-900">Points history</h3>
-          <p className="text-sm text-gray-600">Recent earnings and adjustments</p>
+          <p className="text-sm text-gray-600">
+            Recent earnings and adjustments
+          </p>
         </div>
 
         {/* Desktop Table */}
@@ -216,9 +219,7 @@ const MyLoyaltyPoints = () => {
                       </span>
                     </td>
                     <td className="px-5 py-3">
-                      <span
-                        className="inline-block px-3 py-1 text-xs font-bold rounded-full border bg-green-100 text-green-800 border-green-200"
-                      >
+                      <span className="inline-block px-3 py-1 text-xs font-bold rounded-full border bg-green-100 text-green-800 border-green-200">
                         {item.status}
                       </span>
                     </td>
@@ -237,10 +238,10 @@ const MyLoyaltyPoints = () => {
               className="border-2 border-gray-200 rounded-lg p-4 hover:border-gray-300"
             >
               <div className="flex justify-between items-center mb-2">
-                <p className="text-sm text-gray-600 font-semibold">{item.date}</p>
-                <span
-                  className="px-3 py-1 text-xs font-bold rounded-full border bg-green-100 text-green-800 border-green-200"
-                >
+                <p className="text-sm text-gray-600 font-semibold">
+                  {item.date}
+                </p>
+                <span className="px-3 py-1 text-xs font-bold rounded-full border bg-green-100 text-green-800 border-green-200">
                   {item.status}
                 </span>
               </div>

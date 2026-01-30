@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 const Reviews = () => {
   const products = useMemo(
@@ -24,7 +25,7 @@ const Reviews = () => {
         purchaseDate: "12/22/2024",
       },
     ],
-    []
+    [],
   );
 
   const [reviews, setReviews] = useState([
@@ -121,7 +122,12 @@ const Reviews = () => {
     };
 
     setReviews([newReview, ...reviews]);
-    setFormData({ productId: products[0]?.id || "", rating: 0, title: "", comment: "" });
+    setFormData({
+      productId: products[0]?.id || "",
+      rating: 0,
+      title: "",
+      comment: "",
+    });
     alert("Review submitted!");
   };
 
@@ -137,28 +143,34 @@ const Reviews = () => {
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          MY REVIEWS
-        </h2>
-        <p className="text-gray-600 mt-4">
-          Share feedback on products you purchased. Published reviews help other
-          shoppers decide.
-        </p>
+        {/* mainContaintErTitleRendar */}
+        <Title
+          titleOne={"MY REVIEWS"}
+          titleTwo={
+            "Share feedback on products you purchased. Published reviews help other shoppers decide."
+          }
+        />
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-600 font-semibold">Total reviews</p>
-          <p className="text-3xl font-bold text-mainColor mt-2">{stats.total}</p>
+          <p className="text-3xl font-bold text-mainColor mt-2">
+            {stats.total}
+          </p>
         </div>
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-600 font-semibold">Published</p>
-          <p className="text-2xl font-bold text-green-600 mt-2">{stats.published}</p>
+          <p className="text-2xl font-bold text-green-600 mt-2">
+            {stats.published}
+          </p>
         </div>
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-600 font-semibold">Pending</p>
-          <p className="text-2xl font-bold text-blue-600 mt-2">{stats.pending}</p>
+          <p className="text-2xl font-bold text-blue-600 mt-2">
+            {stats.pending}
+          </p>
         </div>
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-600 font-semibold">Avg rating</p>
@@ -173,7 +185,9 @@ const Reviews = () => {
       <div className="bg-white border-2 border-gray-200 rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-900">Write a review</h3>
-          <p className="text-sm text-gray-600">Only purchased products are listed</p>
+          <p className="text-sm text-gray-600">
+            Only purchased products are listed
+          </p>
         </div>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -183,7 +197,9 @@ const Reviews = () => {
               </label>
               <select
                 value={formData.productId}
-                onChange={(e) => setFormData({ ...formData, productId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, productId: e.target.value })
+                }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
               >
                 {products.map((p) => (
@@ -210,7 +226,9 @@ const Reviews = () => {
                     {starIcon(star <= formData.rating)}
                   </button>
                 ))}
-                <span className="text-sm text-gray-600">{formData.rating || "Select"}</span>
+                <span className="text-sm text-gray-600">
+                  {formData.rating || "Select"}
+                </span>
               </div>
             </div>
           </div>
@@ -223,7 +241,9 @@ const Reviews = () => {
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
                 placeholder="Summarize your review"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
               />
@@ -234,7 +254,10 @@ const Reviews = () => {
               </label>
               <input
                 type="text"
-                value={products.find((p) => p.id === formData.productId)?.orderRef || ""}
+                value={
+                  products.find((p) => p.id === formData.productId)?.orderRef ||
+                  ""
+                }
                 disabled
                 className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-700"
               />
@@ -248,7 +271,9 @@ const Reviews = () => {
             <textarea
               rows={4}
               value={formData.comment}
-              onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, comment: e.target.value })
+              }
               placeholder="Share details about product quality, usability, and your experience."
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
             />
@@ -261,7 +286,12 @@ const Reviews = () => {
             <button
               type="button"
               onClick={() =>
-                setFormData({ productId: products[0]?.id || "", rating: 0, title: "", comment: "" })
+                setFormData({
+                  productId: products[0]?.id || "",
+                  rating: 0,
+                  title: "",
+                  comment: "",
+                })
               }
               className="px-6 py-2.5 bg-gray-400 hover:bg-gray-500 text-white font-bold rounded-lg transition-colors"
             >
@@ -281,7 +311,9 @@ const Reviews = () => {
       <div className="bg-white border-2 border-gray-200 rounded-lg p-6 mb-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-900">Your reviews</h3>
-          <p className="text-sm text-gray-600">Published and pending feedback</p>
+          <p className="text-sm text-gray-600">
+            Published and pending feedback
+          </p>
         </div>
 
         {/* Desktop table */}
@@ -316,7 +348,9 @@ const Reviews = () => {
                     <td className="px-5 py-3 text-gray-900 font-semibold">
                       {r.product.name}
                     </td>
-                    <td className="px-5 py-3 text-gray-700">{r.product.orderRef}</td>
+                    <td className="px-5 py-3 text-gray-700">
+                      {r.product.orderRef}
+                    </td>
                     <td className="px-5 py-3">{renderStars(r.rating)}</td>
                     <td className="px-5 py-3 text-gray-700">
                       <p className="font-semibold text-gray-900">{r.title}</p>
@@ -365,7 +399,9 @@ const Reviews = () => {
                   {r.status}
                 </span>
               </div>
-              <div className="flex items-center gap-2 mb-2">{renderStars(r.rating)}</div>
+              <div className="flex items-center gap-2 mb-2">
+                {renderStars(r.rating)}
+              </div>
               {r.title && (
                 <p className="text-gray-900 font-semibold mb-1">{r.title}</p>
               )}

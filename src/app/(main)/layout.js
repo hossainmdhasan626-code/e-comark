@@ -3,7 +3,7 @@ import Header from "../components/shared/header/Header";
 import Navbar from "../components/shared/navbar/Navbar";
 import NavbarAndSidbarSmItems from "../../../data/NavbarAndSidbarSmItems";
 import SidbarForSm from "../../../data/SidbarForSm";
-import SidbarAndMainContaint from "../components/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaint";
+import SidbarAndMainContaint from "../components/shared/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaint";
 
 const layout = ({ children }) => {
   return (
@@ -13,7 +13,7 @@ const layout = ({ children }) => {
       {/* sidbarAndMainContaintErModdeiMainContaintBaChildrenJacche
       KenoNaEiLayoutTaAroOnekSthaneiUseKoraHobe */}
       <SidbarAndMainContaint
-        title={[
+        breadcrumbs={[
           { label: "Home", link: "/" },
           { label: "Categories", link: null },
         ]}

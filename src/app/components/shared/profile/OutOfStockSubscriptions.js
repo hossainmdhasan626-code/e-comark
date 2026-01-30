@@ -1,6 +1,7 @@
 "use client";
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import Title from "../../ui(reusable)/Title";
 
 const OutOfStockSubscriptions = () => {
   const initialSubscriptions = useMemo(
@@ -33,14 +34,18 @@ const OutOfStockSubscriptions = () => {
         stockEta: "Back in stock", // already notified
       },
     ],
-    []
+    [],
   );
 
   const [subscriptions, setSubscriptions] = useState(initialSubscriptions);
 
   const stats = useMemo(() => {
-    const active = subscriptions.filter((s) => s.status === "Subscribed").length;
-    const notified = subscriptions.filter((s) => s.status === "Notified").length;
+    const active = subscriptions.filter(
+      (s) => s.status === "Subscribed",
+    ).length;
+    const notified = subscriptions.filter(
+      (s) => s.status === "Notified",
+    ).length;
     return {
       total: subscriptions.length,
       active,
@@ -55,8 +60,10 @@ const OutOfStockSubscriptions = () => {
   const handleMarkNotified = (id) => {
     setSubscriptions(
       subscriptions.map((s) =>
-        s.id === id ? { ...s, status: "Notified", stockEta: "Back in stock" } : s
-      )
+        s.id === id
+          ? { ...s, status: "Notified", stockEta: "Back in stock" }
+          : s,
+      ),
     );
   };
 
@@ -64,28 +71,36 @@ const OutOfStockSubscriptions = () => {
     <div className="px-4 md:px-0 bg-white">
       {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 border-b-4 border-mainColor pb-3 inline-block">
-          OUT OF STOCK SUBSCRIPTIONS
-        </h2>
-        <p className="text-gray-600 mt-4">
-          Manage alerts for products that are currently unavailable. We will email you
-          when they are back in stock.
-        </p>
+        {/* mainContaintErTitleRendar */}
+        <Title
+          titleOne={"OUT OF STOCK SUBSCRIPTIONS"}
+          titleTwo={
+            "Manage alerts for products that are currently unavailable. We willemail you when they are back in stock."
+          }
+        />
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
-          <p className="text-sm text-gray-600 font-semibold">Total subscriptions</p>
-          <p className="text-3xl font-bold text-mainColor mt-2">{stats.total}</p>
+          <p className="text-sm text-gray-600 font-semibold">
+            Total subscriptions
+          </p>
+          <p className="text-3xl font-bold text-mainColor mt-2">
+            {stats.total}
+          </p>
         </div>
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-600 font-semibold">Active</p>
-          <p className="text-2xl font-bold text-green-600 mt-2">{stats.active}</p>
+          <p className="text-2xl font-bold text-green-600 mt-2">
+            {stats.active}
+          </p>
         </div>
         <div className="bg-white border-2 border-gray-200 rounded-lg p-4">
           <p className="text-sm text-gray-600 font-semibold">Notified</p>
-          <p className="text-2xl font-bold text-blue-600 mt-2">{stats.notified}</p>
+          <p className="text-2xl font-bold text-blue-600 mt-2">
+            {stats.notified}
+          </p>
         </div>
       </div>
 
@@ -93,8 +108,12 @@ const OutOfStockSubscriptions = () => {
       {subscriptions.length > 0 ? (
         <div className="bg-white border-2 border-gray-200 rounded-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-bold text-gray-900">Your subscriptions</h3>
-            <p className="text-sm text-gray-600">Update or cancel alerts anytime</p>
+            <h3 className="text-lg font-bold text-gray-900">
+              Your subscriptions
+            </h3>
+            <p className="text-sm text-gray-600">
+              Update or cancel alerts anytime
+            </p>
           </div>
 
           {/* Desktop table */}
@@ -129,10 +148,16 @@ const OutOfStockSubscriptions = () => {
                 <tbody className="divide-y divide-gray-200">
                   {subscriptions.map((sub) => (
                     <tr key={sub.id} className="hover:bg-gray-50">
-                      <td className="px-5 py-3 text-gray-900 font-semibold">{sub.product}</td>
+                      <td className="px-5 py-3 text-gray-900 font-semibold">
+                        {sub.product}
+                      </td>
                       <td className="px-5 py-3 text-gray-700">{sub.sku}</td>
-                      <td className="px-5 py-3 text-gray-700">{sub.category}</td>
-                      <td className="px-5 py-3 text-gray-700">{sub.subscribedOn}</td>
+                      <td className="px-5 py-3 text-gray-700">
+                        {sub.category}
+                      </td>
+                      <td className="px-5 py-3 text-gray-700">
+                        {sub.subscribedOn}
+                      </td>
                       <td className="px-5 py-3">
                         <span
                           className={`inline-block px-3 py-1 text-xs font-bold rounded-full border ${
@@ -144,7 +169,9 @@ const OutOfStockSubscriptions = () => {
                           {sub.status}
                         </span>
                       </td>
-                      <td className="px-5 py-3 text-gray-700">{sub.stockEta}</td>
+                      <td className="px-5 py-3 text-gray-700">
+                        {sub.stockEta}
+                      </td>
                       <td className="px-5 py-3">
                         <div className="flex items-center justify-center gap-2">
                           {sub.status === "Subscribed" && (
@@ -157,9 +184,22 @@ const OutOfStockSubscriptions = () => {
                           )}
                           <button
                             onClick={() => handleUnsubscribe(sub.id)}
-                            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors"
+                            className="px-12 py-4 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg transition-colors"
                           >
-                            REMOVE
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={2}
+                              stroke="currentColor"
+                              className="w-5 h-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                              />
+                            </svg>
                           </button>
                         </div>
                       </td>
@@ -179,7 +219,9 @@ const OutOfStockSubscriptions = () => {
               >
                 <div className="flex justify-between items-start mb-2">
                   <div>
-                    <p className="text-sm text-gray-600 font-semibold">{sub.sku}</p>
+                    <p className="text-sm text-gray-600 font-semibold">
+                      {sub.sku}
+                    </p>
                     <p className="text-gray-900 font-bold">{sub.product}</p>
                     <p className="text-xs text-gray-500">{sub.category}</p>
                   </div>
@@ -193,8 +235,12 @@ const OutOfStockSubscriptions = () => {
                     {sub.status}
                   </span>
                 </div>
-                <p className="text-sm text-gray-700 mb-1">Subscribed on: {sub.subscribedOn}</p>
-                <p className="text-sm text-gray-700 mb-3">ETA: {sub.stockEta}</p>
+                <p className="text-sm text-gray-700 mb-1">
+                  Subscribed on: {sub.subscribedOn}
+                </p>
+                <p className="text-sm text-gray-700 mb-3">
+                  ETA: {sub.stockEta}
+                </p>
                 <div className="flex gap-2">
                   {sub.status === "Subscribed" && (
                     <button

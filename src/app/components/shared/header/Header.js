@@ -8,6 +8,7 @@ import ButtonWrapper from "../../ui(reusable)/ButtonWrapper";
 import { useSelector } from "react-redux";
 import SignInOut from "./SignInUp";
 import Link from "next/link";
+import AuthBtn from "../../ui(reusable)/AuthBtn";
 
 const Header = () => {
   const user = useSelector((state) => state.auth);
@@ -28,7 +29,10 @@ const Header = () => {
 
         <div className="md:flex hidden md:block">
           {/* shoppingCard */}
-          <ShoppingCard />
+          <AuthBtn routhName={"/profile?PROFILE_TAB=SAVED%20CARTS"}
+          className={""}>
+            <ShoppingCard />
+          </AuthBtn>
           {user?.fullName ? (
             <Link href="/profile">
               {/* profileBtn */}
