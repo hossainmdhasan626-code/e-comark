@@ -8,6 +8,7 @@ import {
 import { useSelector } from "react-redux";
 import AuthBtn from "@/app/components/ui(reusable)/AuthBtn";
 import { useAddToCartMutation } from "@/app/redux/api/cart/AddtoCartApi";
+import Image from "next/image";
 
 const ProductDetails = ({ params }) => {
   const unwrappedParams = use(params);
@@ -79,7 +80,7 @@ const ProductDetails = ({ params }) => {
         {/* PRODUCT INFO CARD */}
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row">
           <div className="md:w-1/2 p-4 bg-gray-100 flex items-center justify-center">
-            <img
+            <Image
               src={product.image}
               alt={product.title}
               className="max-h-[400px] object-contain hover:scale-105 transition-transform duration-500"
@@ -145,7 +146,7 @@ const ProductDetails = ({ params }) => {
                         </div>
                       </div>
                       <p className="text-gray-600 italic leading-relaxed pl-1">
-                        "{rev.comment}"
+                        {rev.comment}
                       </p>
                     </div>
                   ))}
