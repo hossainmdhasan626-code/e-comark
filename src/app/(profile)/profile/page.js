@@ -1,13 +1,11 @@
 import Information from "@/app/components/shared/profile/Information";
-import React, { Suspense } from "react";
+import React from "react";
 
 const page = () => {
   return (
-    <Suspense fallback={<div>Loading Profile...</div>}>
-      <div>
-        <Information />
-      </div>
-    </Suspense>
+    <div>
+      <Information />
+    </div>
   );
 };
 

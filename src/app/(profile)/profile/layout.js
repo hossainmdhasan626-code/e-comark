@@ -3,6 +3,7 @@ import Header from "../../components/shared/header/Header";
 import FooterComponent from "@/app/components/ui(reusable)/Footer";
 import SidbarAndMainContaint from "@/app/components/shared/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaint";
 import { profileSidebar } from "../../../../data/ProfileSidebar";
+import { Suspense } from "react";
 
 const layout = ({ children }) => {
   return (
@@ -10,14 +11,16 @@ const layout = ({ children }) => {
       <Header />
       <ProfileNavbar />
       {/* eiComponentTaMulotoEktaLaoutDibeJetaSidebarArMainContaintKeRendarKorbe */}
-      <SidbarAndMainContaint
-        title={[
-          { label: "Home", link: "/" },
-          { label: "My Account", link: null },
-        ]}
-        mainContaint={children}
-        sidbarContaint={profileSidebar}
-      />
+      <Suspense fallback={<div>Loading Navigation...</div>}>
+        <SidbarAndMainContaint
+          title={[
+            { label: "Home", link: "/" },
+            { label: "My Account", link: null },
+          ]}
+          mainContaint={children}
+          sidbarContaint={profileSidebar}
+        />
+      </Suspense>
       <FooterComponent />
     </div>
   );
