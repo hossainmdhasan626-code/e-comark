@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Title from "../../ui(reusable)/Title";
 import { useGetCartItemsQuery } from "@/app/redux/api/cart/AddtoCartApi";
+import Image from "next/image";
 
 const SavedCarts = () => {
   const { data: addToCart = [], isLoading } = useGetCartItemsQuery();
@@ -69,7 +70,7 @@ const SavedCarts = () => {
                     {/* Image Area */}
                     <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden">
                       {item.image ? (
-                        <img
+                        <Image
                           src={item.image}
                           alt={item.title}
                           className="object-contain w-full h-full p-2"
@@ -167,8 +168,8 @@ const SavedCarts = () => {
             Your cart is feeling light!
           </h3>
           <p className="text-gray-500 mt-2 mb-8 max-w-xs text-center">
-            Looks like you haven't added any products to your cart yet. Let's
-            find something special!
+            Looks like you {"haven't"} added any products to your cart yet.
+            {"Let's"} find something special!
           </p>
           <Link
             href="/"
