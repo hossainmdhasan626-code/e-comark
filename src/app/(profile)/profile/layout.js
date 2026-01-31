@@ -8,10 +8,10 @@ import { Suspense } from "react";
 const layout = ({ children }) => {
   return (
     <div>
-      <Header />
+      <Header drawerItems={profileSidebar}/>
       <ProfileNavbar />
-      {/* eiComponentTaMulotoEktaLaoutDibeJetaSidebarArMainContaintKeRendarKorbe */}
       <Suspense fallback={<div>Loading Navigation...</div>}>
+        {/* eiComponentTaMulotoEktaLaoutDibeJetaSidebarArMainContaintKeRendarKorbe */}
         <SidbarAndMainContaint
           title={[
             { label: "Home", link: "/" },
