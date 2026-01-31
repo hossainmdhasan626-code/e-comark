@@ -1,9 +1,30 @@
-import React from "react";
-import NavbarAndSidbarSmItems from "../../../../../data/NavbarAndSidbarSmItems";
-
+"use client";
 // thisComponentUiWasOnelyForSmScreen
 
-const Sidbar = () => {
+import { useRouter } from "next/navigation";
+
+const Sidbar = ({ drawerItems }) => {
+  const router = useRouter();
+
+  const onItemClick = (item) => {
+    alert("clicked");
+    if (!item) return;
+
+    if (item.type === "PROFILE_TAB") {
+      router.push(`?PROFILE_TAB=${item?.name}`);
+      console.log(`State was set: ${item.name}`);
+    }
+
+    if (item.type === "CATEGORY") {
+      console.log(`query was createed: ${item.name}`);
+    }
+
+    const drawerCheckbox = document.getElementById("my-drawer-5");
+    if (drawerCheckbox) {
+      drawerCheckbox.checked = false;
+    }
+  };
+
   return (
     <div className="drawer drawer-end">
       <input id="my-drawer-5" type="checkbox" className="drawer-toggle" />
@@ -42,7 +63,7 @@ const Sidbar = () => {
 
         {/* drawerMenuContent */}
         <ul className="menu bg-mainColor min-h-full w-80 p-4 flex flex-col gap-3 text-white">
-          {NavbarAndSidbarSmItems.map((item) => {
+          {drawerItems.map((item) => {
             return item?.children ? (
               <li key={item?.id}>
                 <details>
@@ -54,9 +75,9 @@ const Sidbar = () => {
                   <ul className="mt-2 ml-4 border-l-2 border-white pl-2 flex flex-col gap-2">
                     {item.children.map((childItem) => (
                       <li key={childItem?.id}>
-                        <a className="btn btn-sm border-2 justify-start bg-mainColor text-white border-white hover:bg-[#1a1a1a] transition-all w-full">
+                        <button className="btn btn-sm border-2 justify-start bg-mainColor text-white border-white hover:bg-[#1a1a1a] transition-all w-full">
                           {childItem?.name}
-                        </a>
+                        </button>
                       </li>
                     ))}
                   </ul>
@@ -64,9 +85,12 @@ const Sidbar = () => {
               </li>
             ) : (
               <li key={item?.id}>
-                <a className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all w-full flex justify-start items-center min-h-[3rem]">
+                <button
+                  onClick={() => onItemClick(item)}
+                  className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all w-full flex justify-start items-center min-h-[3rem]"
+                >
                   {item?.name}
-                </a>
+                </button>
               </li>
             );
           })}

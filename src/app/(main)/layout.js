@@ -9,7 +9,7 @@ import { Suspense } from "react";
 const layout = ({ children }) => {
   return (
     <>
-      <Header />
+      <Header drawerItems={NavbarAndSidbarSmItems}/>
       <Navbar navbarItems={NavbarAndSidbarSmItems} />
       {/* sidbarAndMainContaintErModdeiMainContaintBaChildrenJacche
       KenoNaEiLayoutTaAroOnekSthaneiUseKoraHobe */}

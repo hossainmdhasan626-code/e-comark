@@ -73,6 +73,8 @@ const SavedCarts = () => {
                         <Image
                           src={item.image}
                           alt={item.title}
+                          width={20}
+                          height={20}
                           className="object-contain w-full h-full p-2"
                         />
                       ) : (

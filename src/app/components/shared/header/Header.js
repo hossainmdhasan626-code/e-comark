@@ -10,7 +10,7 @@ import SignInOut from "./SignInUp";
 import Link from "next/link";
 import AuthBtn from "../../ui(reusable)/AuthBtn";
 
-const Header = () => {
+const Header = ({drawerItems}) => {
   const user = useSelector((state) => state.auth);
 
   return (
@@ -24,7 +24,7 @@ const Header = () => {
         <div>
           {/* eiComponentTaMulotoMdArTarCeBoroScreenErJonnoSuduSearchBarRendarKore
           ArSmErJonnoEktaNavbarObolayNavbarRendarKore */}
-          <NavbarSmOrMd />
+          <NavbarSmOrMd drawerItems={drawerItems}/>
         </div>
 
         <div className="md:flex hidden md:block">
