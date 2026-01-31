@@ -92,6 +92,7 @@ const SidbarAndMainContaint = ({ breadcrumbs, sidbarContaint, mainContaint }) =>
         />
       </div>
       <div className="md:w-[70%] p-5">
+        {/* children */}
         {RendaredComponentInProfilePage
           ? RendaredComponentInProfilePage
           : mainContaint}

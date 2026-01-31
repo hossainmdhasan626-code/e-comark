@@ -83,6 +83,8 @@ const ProductDetails = ({ params }) => {
             <Image
               src={product.image}
               alt={product.title}
+              width={600}
+              height={500}
               className="max-h-[400px] object-contain hover:scale-105 transition-transform duration-500"
             />
           </div>
