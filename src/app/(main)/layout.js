@@ -4,6 +4,7 @@ import Navbar from "../components/shared/navbar/Navbar";
 import NavbarAndSidbarSmItems from "../../../data/NavbarAndSidbarSmItems";
 import SidbarForSm from "../../../data/SidbarForSm";
 import SidbarAndMainContaint from "../components/shared/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaint";
+import { Suspense } from "react";
 
 const layout = ({ children }) => {
   return (
@@ -12,14 +13,16 @@ const layout = ({ children }) => {
       <Navbar navbarItems={NavbarAndSidbarSmItems} />
       {/* sidbarAndMainContaintErModdeiMainContaintBaChildrenJacche
       KenoNaEiLayoutTaAroOnekSthaneiUseKoraHobe */}
-      <SidbarAndMainContaint
-        breadcrumbs={[
-          { label: "Home", link: "/" },
-          { label: "Categories", link: null },
-        ]}
-        sidbarContaint={SidbarForSm}
-        mainContaint={children}
-      />
+      <Suspense fallback={<div>Loading Navigation...</div>}>
+        <SidbarAndMainContaint
+          breadcrumbs={[
+            { label: "Home", link: "/" },
+            { label: "Categories", link: null },
+          ]}
+          sidbarContaint={SidbarForSm}
+          mainContaint={children}
+        />
+      </Suspense>
       {/* footer */}
       <FooterComponent />
     </>
