@@ -42,7 +42,6 @@ const ProductDetails = ({ params }) => {
           cartItemId: Date.now() + i,
         });
       }
-      alert(isExistInCartList ? "exist" : "NOt exist");
     } catch (error) {
       console.error("Failed to add items:", error);
     }
