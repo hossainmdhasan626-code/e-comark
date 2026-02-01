@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import AuthBtn from "./AuthBtn";
 import Link from "next/link";
 import { useAddToCartMutation } from "@/app/redux/api/cart/AddtoCartApi";
+import IsExistInAddToCartBtn from "./IsExistInAddToCartBtn";
 
 const Card = ({ item }) => {
   const [addToCart, { isLoading }] = useAddToCartMutation();
@@ -12,7 +12,6 @@ const Card = ({ item }) => {
       // addToCartApiTeCartErDataPathaccheJateAddToCartSectionKe
       // UpdatedKortePare
       await addToCart(item).unwrap();
-      alert("add to cart");
     } catch (error) {
       console.error("Failed to add:", error);
       alert("Something went wrong!");
@@ -51,13 +50,11 @@ const Card = ({ item }) => {
           </p>
 
           <div className="card-actions justify-end mt-4">
-            <AuthBtn
-              className={"btn btn-primary btn-sm px-6"}
-              onClickAction={handleAddToCart}
-              // routhName={"/profile?PROFILE_TAB=SAVED%20CARTS"}
-            >
-              {isLoading ? "Adding..." : "Add to card"}
-            </AuthBtn>
+            <IsExistInAddToCartBtn
+              id={item?.id}
+              loading={isLoading}
+              onClick={handleAddToCart}
+            />
           </div>
         </div>
       </div>

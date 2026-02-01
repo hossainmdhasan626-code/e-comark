@@ -4,11 +4,11 @@ import ButtonWrapper from "../../ui(reusable)/ButtonWrapper";
 const SignInOut = () => {
   return (
     <>
-      <div className="flex ">
-        <Link href="/signin">
-        <ButtonWrapper>SignIn</ButtonWrapper>
-        </Link>
-      </div>
+      <Link href="/signin">
+        <ButtonWrapper>
+          <div className="w-5 md:w-14 flex justify-center items-center">SignIn</div>
+        </ButtonWrapper>
+      </Link>
     </>
   );
 };

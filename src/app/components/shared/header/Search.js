@@ -2,11 +2,11 @@ import React from "react";
 
 const Search = () => {
   return (
-    <>
+    <div>
       <label
         className="
           input flex items-center gap-2 transition-all
-          w-[200px] h-10 border-2 border-gray-50
+          w-[150px] h-10 border-2 border-gray-50
           md:w-[500px] md:h-12 md:border-mainColor 
           md:focus-within:border-gray-50
         "
@@ -29,7 +29,7 @@ const Search = () => {
         </svg>
         <input type="search" required placeholder="Search" className="grow" />
       </label>
-    </>
+    </div>
   );
 };
 

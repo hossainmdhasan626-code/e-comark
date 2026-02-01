@@ -64,7 +64,7 @@ const SavedCarts = () => {
               >
                 {cartItems.map((item) => (
                   <div
-                    key={item.id}
+                    key={item.id || item.id + Math.random()}
                     className="flex gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-white border border-transparent hover:border-gray-200 transition-all duration-300"
                   >
                     {/* Image Area */}

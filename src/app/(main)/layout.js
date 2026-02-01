@@ -17,7 +17,6 @@ const layout = ({ children }) => {
         <SidbarAndMainContaint
           breadcrumbs={[
             { label: "Home", link: "/" },
-            { label: "Categories", link: null },
           ]}
           sidbarContaint={SidbarForSm}
           mainContaint={children}

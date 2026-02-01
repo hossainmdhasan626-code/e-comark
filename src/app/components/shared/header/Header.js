@@ -10,7 +10,7 @@ import SignInOut from "./SignInUp";
 import Link from "next/link";
 import AuthBtn from "../../ui(reusable)/AuthBtn";
 
-const Header = ({drawerItems}) => {
+const Header = ({ drawerItems }) => {
   const user = useSelector((state) => state.auth);
 
   return (
@@ -24,15 +24,15 @@ const Header = ({drawerItems}) => {
         <div>
           {/* eiComponentTaMulotoMdArTarCeBoroScreenErJonnoSuduSearchBarRendarKore
           ArSmErJonnoEktaNavbarObolayNavbarRendarKore */}
-          <NavbarSmOrMd drawerItems={drawerItems}/>
+          <NavbarSmOrMd drawerItems={drawerItems} />
         </div>
 
         <div className="md:flex hidden md:block">
-          {/* shoppingCard */}
-          <AuthBtn routhName={"/profile?PROFILE_TAB=SAVED%20CARTS"}
-          className={""}>
+          <div>
+            {/* shoppingCard */}
             <ShoppingCard />
-          </AuthBtn>
+          </div>
+
           {user?.fullName ? (
             <Link href="/profile">
               {/* profileBtn */}
