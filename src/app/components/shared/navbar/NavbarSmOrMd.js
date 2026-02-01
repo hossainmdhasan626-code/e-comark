@@ -6,6 +6,7 @@ import Sidbar from "../header/Sidbar";
 import { useSelector } from "react-redux";
 import SignInOut from "../header/SignInUp";
 import Link from "next/link";
+import ShoppingCard from "../header/ShoppingCard";
 
 const NavbarSmOrMd = ({ drawerItems }) => {
   const user = useSelector((state) => state.auth);
@@ -26,7 +27,9 @@ const NavbarSmOrMd = ({ drawerItems }) => {
               <Search />
             </div>
 
-            <div>
+            <div className="flex">
+              {/* shopingCart */}
+              <ShoppingCard />
               {user?.fullName ? (
                 <Link href={"/profile"}>
                   <label

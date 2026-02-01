@@ -13,7 +13,7 @@ const layout = ({ children }) => {
       <Suspense fallback={<div>Loading Navigation...</div>}>
         {/* eiComponentTaMulotoEktaLaoutDibeJetaSidebarArMainContaintKeRendarKorbe */}
         <SidbarAndMainContaint
-          title={[
+          breadcrumbs={[
             { label: "Home", link: "/" },
             { label: "My Account", link: null },
           ]}

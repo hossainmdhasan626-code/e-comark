@@ -6,7 +6,7 @@ let cartList = [];
 export const addToCartApi = createApi({
   reducerPath: "cartApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/" }),
-  tagTypes:["Cart"],
+  tagTypes: ["Cart"],
   endpoints: (builder) => ({
     // Data pathanor jonno mutation use kora holo
     addToCart: builder.mutation({
@@ -14,7 +14,6 @@ export const addToCartApi = createApi({
         try {
           // Imuutable vabe data add kora
           cartList = [product, ...cartList];
-          alert("Data added to add to cart")
           return { data: cartList }; // Success response
         } catch (error) {
           return { error: { status: 500, data: "Failed to add to cart" } };
@@ -30,8 +29,26 @@ export const addToCartApi = createApi({
       },
       providesTags: ["Cart"],
     }),
+
+    includesItemInCartList: builder.query({
+      queryFn: (id) => {
+        try {
+          const isExist = cartList.some(
+            (item) => Number(item.id) === Number(id),
+          );
+          return { data: isExist };
+        } catch {
+          return { error: { status: 500, data: "Error checking cart" } };
+        }
+      },
+      providesTags: ["Cart"],
+    }),
   }),
 });
 
 // Mutation er jonno 'use' + 'EndpointName' + 'Mutation'
-export const { useAddToCartMutation, useGetCartItemsQuery } = addToCartApi;
+export const {
+  useAddToCartMutation,
+  useGetCartItemsQuery,
+  useIncludesItemInCartListQuery,
+} = addToCartApi;
