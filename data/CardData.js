@@ -2,202 +2,86 @@ const CardData = [
   {
     id: 1,
     title: "Arduino Uno R3",
-    description:
-      "The most popular Arduino board for beginners and prototyping.",
+    shortDescription: "The most popular Arduino board for beginners.",
+    fullDescription: "The Arduino Uno R3 is a microcontroller board based on the ATmega328P. It has 14 digital input/output pins, 6 analog inputs, and a 16 MHz quartz crystal. It contains everything needed to support the microcontroller; simply connect it to a computer with a USB cable or power it with a AC-to-DC adapter to get started.",
     price: 25,
-    image:
-      "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=400&h=300&fit=crop",
     category: "Microcontrollers",
+    // Bistarito Warranty
+    warranty: "6 Months Service Warranty",
+    warrantyDetails: [
+      "Replacement available for manufacturing defects within 7 days.",
+      "6 months of free technical service for firmware or driver issues.",
+      "Does not cover burnt or physical damage due to wrong voltage input.",
+      "Customer must provide the original box for warranty claims."
+    ],
+    specifications: ["Microcontroller: ATmega328P", "Operating Voltage: 5V", "Digital I/O Pins: 14", "Flash Memory: 32 KB"],
     reviews: [
-      {
-        id: 101,
-        user: "Hasan",
-        rating: 5,
-        comment: "Original product, works perfectly!",
-      },
-      {
-        id: 102,
-        user: "Anik",
-        rating: 4,
-        comment: "Good quality but shipping was slow.",
-      },
+      { id: 101, user: "Hasan", rating: 5, comment: "Original product, works perfectly!" },
+      { id: 102, user: "Anik", rating: 4, comment: "Good quality but shipping was slow." },
       { id: 103, user: "Siam", rating: 5, comment: "Best for beginners." },
     ],
   },
   {
     id: 2,
     title: "Ultrasonic Sensor HC-SR04",
-    description: "Distance measuring sensor module with 2cm to 400cm range.",
+    shortDescription: "Distance measuring sensor module.",
+    fullDescription: "HC-SR04 Ultrasonic distance sensor provides 2cm - 400cm non-contact measurement function, the ranging accuracy can reach to 3mm. The modules includes ultrasonic transmitters, receiver and control circuit.",
     price: 5,
-    image:
-      "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=300&fit=crop",
     category: "Sensors",
-    reviews: [], // Empty - ekhane tumi add korte parbe
+    // Bistarito Warranty
+    warranty: "No Warranty (Testing Policy Only)",
+    warrantyDetails: [
+      "3-day check-in period for checking performance.",
+      "If the sensor fails to detect distance on first arrival, it will be replaced.",
+      "No warranty covers sensors damaged by water, high voltage, or heat.",
+      "Technical support available for wiring instructions."
+    ],
+    specifications: ["Power Supply: 5V DC", "Quiescent Current: <2mA", "Effectual Angle: <15°", "Ranging Distance: 2cm – 400 cm"],
+    reviews: [],
   },
   {
     id: 3,
     title: "DHT22 Temperature Sensor",
-    description: "Digital temperature and humidity sensor with high accuracy.",
+    shortDescription: "High accuracy digital temp and humidity sensor.",
+    fullDescription: "The DHT22 is a basic, low-cost digital temperature and humidity sensor. It uses a capacitive humidity sensor and a thermistor to measure the surrounding air, and spits out a digital signal on the data pin (no analog input pins needed).",
     price: 8,
-    image:
-      "https://images.unsplash.com/photo-1591489378810-d2a4ac9ecef7?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1591489378810-d2a4ac9ecef7?w=400&h=300&fit=crop",
     category: "Sensors",
-    reviews: [
-      {
-        id: 104,
-        user: "Tanvir",
-        rating: 5,
-        comment: "Very accurate readings compared to DHT11.",
-      },
-      {
-        id: 105,
-        user: "Rakib",
-        rating: 4,
-        comment: "A bit expensive but worth it.",
-      },
+    warranty: "3 Months Limited Warranty",
+    warrantyDetails: [
+      "3 months limited warranty on internal chip failure.",
+      "Replacement within 15 days if the reading error is beyond ±5%.",
+      "Corrosion or exposure to high chemical concentration voids the warranty.",
+      "Must be used with a 4.7K or 10K resistor for stable reading."
     ],
-  },
-  {
-    id: 4,
-    title: "PIR Motion Sensor",
-    description: "Passive infrared sensor for motion detection projects.",
-    price: 4,
-    image:
-      "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=300&fit=crop",
-    category: "Sensors",
-    reviews: [], // Empty
+    specifications: ["Humidity: 0-100% accuracy", "Temperature: -40 to 80°C", "Sampling rate: 0.5Hz"],
+    reviews: [
+      { id: 104, user: "Tanvir", rating: 5, comment: "Very accurate readings compared to DHT11." },
+    ],
   },
   {
     id: 5,
     title: "Arduino Mega 2560",
-    description:
-      "Extended I/O board with 54 digital pins for complex projects.",
+    shortDescription: "Extended I/O board for complex projects.",
+    fullDescription: "The Arduino Mega 2560 is a microcontroller board based on the ATmega2560. It has 54 digital input/output pins (of which 15 can be used as PWM outputs), 16 analog inputs, 4 UARTs (hardware serial ports).",
     price: 45,
-    image:
-      "https://images.unsplash.com/photo-1608564697071-ddf911d81370?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1608564697071-ddf911d81370?w=400&h=300&fit=crop",
     category: "Microcontrollers",
+    warranty: "1 Year Official Brand Warranty",
+    warrantyDetails: [
+      "12 months full parts and service warranty.",
+      "Covers any manufacturing defects or hardware malfunctions.",
+      "Replacement provided for DOA (Dead on Arrival) cases.",
+      "Does not cover short-circuits caused by improper external wiring."
+    ],
+    specifications: ["Microcontroller: ATmega2560", "Digital Pins: 54", "Analog Pins: 16", "Flash Memory: 256 KB"],
     reviews: [
-      {
-        id: 106,
-        user: "Fahim",
-        rating: 5,
-        comment: "Plenty of pins for my 3D printer project.",
-      },
-      { id: 107, user: "Sakib", rating: 5, comment: "Solid build quality." },
-      {
-        id: 108,
-        user: "Ariful",
-        rating: 4,
-        comment: "Genuine board, no issues with drivers.",
-      },
-      {
-        id: 109,
-        user: "Mehedi",
-        rating: 5,
-        comment: "Fast delivery, highly recommended.",
-      },
-      { id: 110, user: "Zishan", rating: 4, comment: "Packaging was great." },
+      { id: 106, user: "Fahim", rating: 5, comment: "Plenty of pins for my 3D printer project." },
     ],
   },
-  {
-    id: 6,
-    title: "MQ-2 Gas Sensor",
-    description: "Detects LPG, smoke, alcohol, propane, hydrogen, methane.",
-    price: 6,
-    image:
-      "https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=400&h=300&fit=crop",
-    category: "Sensors",
-    reviews: [
-      {
-        id: 111,
-        user: "Nayeem",
-        rating: 5,
-        comment: "Very sensitive to smoke.",
-      },
-      {
-        id: 112,
-        user: "Emon",
-        rating: 4,
-        comment: "Need to calibrate it for 24 hours first.",
-      },
-      {
-        id: 113,
-        user: "Joy",
-        rating: 5,
-        comment: "Working fine with my home automation system.",
-      },
-      {
-        id: 114,
-        user: "Alamin",
-        rating: 3,
-        comment: "Good, but takes time to stabilize.",
-      },
-    ],
-  },
-  {
-    id: 7,
-    title: "Soil Moisture Sensor",
-    description: "Measures soil moisture level for automated watering systems.",
-    price: 3,
-    image:
-      "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop",
-    category: "Sensors",
-    reviews: [], // Empty
-  },
-  {
-    id: 8,
-    title: "Arduino Nano",
-    description:
-      "Compact board perfect for breadboard and space-limited projects.",
-    price: 15,
-    image:
-      "https://images.unsplash.com/photo-1601524909162-ae8725290836?w=400&h=300&fit=crop",
-    category: "Microcontrollers",
-    reviews: [
-      { id: 115, user: "Robin", rating: 5, comment: "Compact and powerful." },
-      {
-        id: 116,
-        user: "Sumon",
-        rating: 4,
-        comment: "Mini USB port is a bit old-school but works.",
-      },
-      {
-        id: 117,
-        user: "Kamrul",
-        rating: 5,
-        comment: "Great for drone projects.",
-      },
-      { id: 118, user: "Sabbir", rating: 5, comment: "Cheap and reliable." },
-      {
-        id: 119,
-        user: "Munna",
-        rating: 4,
-        comment: "Perfectly fits on a breadboard.",
-      },
-      {
-        id: 120,
-        user: "Tushar",
-        rating: 5,
-        comment: "Awesome for small gadgets.",
-      },
-      {
-        id: 121,
-        user: "Liton",
-        rating: 5,
-        comment: "My favorite Arduino board.",
-      },
-    ],
-  },
-  {
-    id: 9,
-    title: "MPU6050 Gyroscope",
-    description: "6-axis accelerometer and gyroscope for motion tracking.",
-    price: 7,
-    image:
-      "https://images.unsplash.com/photo-1581092162384-8987c1d64718?w=400&h=300&fit=crop",
-    category: "Sensors",
-    reviews: [], // Empty
-  },
+  // Onno product guli eivabe update kora jabe...
 ];
 
 export default CardData;
