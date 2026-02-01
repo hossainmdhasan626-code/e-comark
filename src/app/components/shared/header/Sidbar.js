@@ -86,7 +86,7 @@ const Sidbar = ({ drawerItems }) => {
               <li key={item?.id}>
                 <button
                   onClick={() => onItemClick(item)}
-                  className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all w-5 flex justify-start items-center min-h-[3rem]"
+                  className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all flex justify-start items-center min-h-[3rem] w-full"
                 >
                   {item?.name}
                 </button>
