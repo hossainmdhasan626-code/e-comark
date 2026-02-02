@@ -22,9 +22,9 @@ const Card = ({ item }) => {
       <div className="card bg-base-100 shadow-sm border border-gray-100 overflow-hidden">
         <figure className="bg-gray-200 h-48 w-full flex items-center justify-center relative overflow-hidden">
           <Link href={`productDetails/${item?.id}`}>
-            {item?.image ? (
+            {item?.images[0] ? (
               <Image
-                src={item.image}
+              src={item?.images[0]}
                 alt={item?.title || "Product image"}
                 fill
                 className="object-cover"
