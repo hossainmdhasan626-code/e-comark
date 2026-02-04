@@ -2,38 +2,74 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Title from "../../ui(reusable)/Title";
-import { useGetCartItemsQuery } from "@/app/redux/api/cart/AddtoCartApi";
+import {
+  useDeletItemFormAddToCartMutation,
+  useGetCartItemsQuery,
+} from "@/app/redux/api/cart/AddtoCartApi";
 import Image from "next/image";
 
 const SavedCarts = () => {
+  // RTK
   const { data: addToCart = [], isLoading } = useGetCartItemsQuery();
+  const [deletItemFormAddToCart] = useDeletItemFormAddToCartMutation();
   const [cartItems, setCartItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
-  // API theke data asle state update kora
+  //apiThekeDataAsleStateUpdatedHobe
   useEffect(() => {
     if (addToCart) {
       setCartItems(addToCart);
     }
   }, [addToCart]);
 
+  // quantityBaranorJonno
   const handleUpdateQuantity = (itemId, delta) => {
-    setCartItems((prev) =>
-      prev.map((item) =>
-        item.id === itemId
-          ? { ...item, quantity: Math.max(1, (item.quantity || 1) + delta) }
-          : item,
-      ),
-    );
+    setCartItems((prev) => {
+      return prev.map((item) => {
+        if (itemId === item.id) {
+          return {
+            ...item,
+            quantity: Math.max(1, (item.quantity || 1) + delta),
+          };
+        } else {
+          return item;
+        }
+      });
+    });
   };
 
-  const handleRemoveItem = (itemId) => {
-    setCartItems((prev) => prev.filter((item) => item.id !== itemId));
+  // addToCartErItemDeletErJonno
+  const handleRemoveItem = async (itemId) => {
+    try {
+      // reduxErMulAddToCartThekeDeletErJonno
+      await deletItemFormAddToCart(itemId).unwrap();
+
+      // selectedItemsThekeDelet
+      setSelectedItems((prev) => prev.filter((i) => i.id !== itemId));
+
+    } catch (error) {
+      console.error("Failed to remove item:", error);
+    }
   };
 
-  const totalAmount = cartItems.reduce(
-    (sum, item) => sum + (item.price || 0) * (item.quantity || 1),
-    0,
-  );
+  // selectKoraItem
+  const handleSelect = (item) => {
+    // ageDekheNeiItemAcheKina
+    setSelectedItems((prev) => {
+      const isExist = prev.find((i) => i.id === item.id);
+
+      if (isExist) {
+        return prev.filter((i) => i.id !== item.id);
+      } else {
+        return [...prev, item];
+      }
+    });
+  };
+
+  // suduMatroJaJaSelectKoraOigulirITotao
+  const totalAmount = selectedItems.reduce((total, item) => {
+    return total + item.price * (item.quantity || 1);
+  }, 0);
 
   if (isLoading)
     return <div className="p-10 text-center font-bold">Loading Cart...</div>;
@@ -47,26 +83,35 @@ const SavedCarts = () => {
         />
       </div>
 
-      {cartItems.length > 0 ? (
+      {cartItems?.length > 0 ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <div className="bg-white border-2 border-gray-100 rounded-3xl p-6 shadow-sm">
               <h4 className="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
                 YOUR ITEMS{" "}
                 <span className="bg-mainColor/10 text-mainColor px-2 py-0.5 rounded text-sm">
-                  {cartItems.length}
+                  {cartItems?.length}
                 </span>
               </h4>
 
               {/* Scrollable Container for 4+ items */}
               <div
-                className={`space-y-4 pr-2 ${cartItems.length > 4 ? "max-h-[550px] overflow-y-auto custom-scrollbar" : ""}`}
+                className={`space-y-4 pr-2 ${cartItems?.length > 4 ? "max-h-[550px] overflow-y-auto custom-scrollbar" : ""}`}
               >
-                {cartItems.map((item) => (
+                {cartItems?.map((item) => (
                   <div
                     key={item.id || item.id + Math.random()}
                     className="flex gap-4 p-4 bg-gray-50 rounded-2xl hover:bg-white border border-transparent hover:border-gray-200 transition-all duration-300"
                   >
+                    {/* checkbox */}
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        className="checkbox checkbox-primary"
+                        // checked={selectedItems.includes(item.id)}
+                        onChange={() => handleSelect(item)}
+                      />
+                    </div>
                     {/* Image Area */}
                     <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm overflow-hidden">
                       {item.image ? (
@@ -143,7 +188,7 @@ const SavedCarts = () => {
               <div className="space-y-4 border-b border-gray-700 pb-6 mb-6">
                 <div className="flex justify-between opacity-80">
                   <span>Subtotal</span>
-                  <span>BDT {totalAmount.toLocaleString()}</span>
+                  <span>BDT {totalAmount?.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between text-green-400">
                   <span>Shipping</span>
@@ -152,7 +197,7 @@ const SavedCarts = () => {
               </div>
               <div className="flex justify-between text-2xl font-bold mb-8">
                 <span>Total</span>
-                <span>BDT {totalAmount.toLocaleString()}</span>
+                <span>BDT {totalAmount?.toLocaleString()}</span>
               </div>
               <button className="w-full py-4 bg-mainColor hover:bg-orange-600 rounded-2xl font-bold transition-all transform active:scale-95 shadow-lg shadow-orange-900/20">
                 CHECKOUT NOW
