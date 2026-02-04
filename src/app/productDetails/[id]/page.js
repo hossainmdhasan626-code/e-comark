@@ -21,11 +21,14 @@ const ProductDetails = ({ params }) => {
   // imgErJonno
   const [activeImg, setActiveImg] = useState(null);
 
+  // paramsEAsaIdThekeOiProductBerKorarJOnno
   const { data: product, isLoading: filterProductIsLoading } =
     useGetFilterProductsQuery(id);
 
+  // addToCartEAddErJonno
   const [addToCart, { isLoading: addToCartIsLoading }] = useAddToCartMutation();
 
+  // descriptionPageThekeQuantityHandleErJonno
   const handleQuantity = (type) => {
     if (type === "plus") {
       setQuantity((prev) => prev + 1);
@@ -34,6 +37,7 @@ const ProductDetails = ({ params }) => {
     }
   };
 
+  // addToCartEAddErJonno
   const handleAddToCart = async () => {
     try {
       for (let i = 0; i < quantity; i++) {
@@ -68,7 +72,7 @@ const ProductDetails = ({ params }) => {
       <div className="max-w-6xl mx-auto space-y-8">
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row">
           <div className="md:w-1/2 p-6 bg-gray-100">
-            {/* MAIN LARGE IMAGE */}
+            {/* mainImg */}
             <div className="bg-white rounded-2xl overflow-hidden flex items-center justify-center min-h-[400px] border border-gray-200">
               <InnerImageZoom
                 src={currentImage}

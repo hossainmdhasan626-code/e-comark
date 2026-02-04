@@ -43,6 +43,19 @@ export const addToCartApi = createApi({
       },
       providesTags: ["Cart"],
     }),
+
+    // addToCartThekeKonotaDeletHole
+    deletItemFormAddToCart: builder.mutation({
+      queryFn: (itemId) => {
+        try {
+          cartList = cartList.filter((i) => i.id !== itemId);
+          return { data: cartList };
+        } catch (error) {
+          return { error: { status: 500, data: "Failed to delete" } };
+        }
+      },
+      invalidatesTags: ["Cart"],
+    }),
   }),
 });
 
@@ -51,4 +64,5 @@ export const {
   useAddToCartMutation,
   useGetCartItemsQuery,
   useIncludesItemInCartListQuery,
+  useDeletItemFormAddToCartMutation,
 } = addToCartApi;
