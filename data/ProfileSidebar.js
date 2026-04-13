@@ -48,13 +48,13 @@ export const profileSidebar = [
     icon: "ReviewIcon",
     path: "/profile/reviews",
   },
-  {
-    id: 8,
-    name: "SAVED CARTS",
-    type: "PROFILE_TAB",
-    icon: "ShoppingCartIcon",
-    path: "/profile/saved-carts",
-  },
+  // {
+  //   id: 8,
+  //   name: "SAVED CARTS",
+  //   type: "PROFILE_TAB",
+  //   icon: "ShoppingCartIcon",
+  //   path: "/profile/saved-carts",
+  // },
   {
     id: 9,
     name: "OUT OF STOCK SUBSCRIPTIONS",

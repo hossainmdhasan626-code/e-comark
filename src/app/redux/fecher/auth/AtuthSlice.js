@@ -1,10 +1,14 @@
 const { createSlice } = require("@reduxjs/toolkit");
 
+// const getTokenFormLocalStorage = localStorage.getItem("token");
+// const convartToken = JSON.parse(getTokenFormLocalStorage);
+// const initialState = {
+//   access: convartToken?.access || null,
+//   refresh: convartToken?.refresh || null,
+// };
 const initialState = {
-  fullName: null,
-  email: null,
-  password: null,
-  number: null,
+  access:   null,
+  refresh:  null,
 };
 
 const authSlice = createSlice({
@@ -12,12 +16,11 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     authData: (state, action) => {
-      const { firstName, lastName, email, password, number } = action.payload;
+      const { access, refresh } = action.payload;
 
-      state.fullName = `${firstName} ${lastName}`;
-      state.email = email;
-      state.password = password;
-      state.number = number;
+      state.access = access;
+      state.refresh = refresh;
+      alert(access,refresh);
     },
   },
 });

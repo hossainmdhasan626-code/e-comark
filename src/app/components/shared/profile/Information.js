@@ -1,38 +1,62 @@
 "use client";
 
-import { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import Title from "../../ui(reusable)/Title";
 import { profileInformationSchema } from "../forms/schema/profilePageSchemas/ProfileInformationSchema";
+import {
+  useGetProfileQuery,
+  useUpdateProfileMutation,
+} from "@/app/redux/api/profile/ProfileApi";
+import IsErrorRTK from "../../ui(reusable)/IsErrorRTK";
 
 const Information = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
+  // RTKDiyeApiTeHitKora
+  const { data, isLoading, isError, error } = useGetProfileQuery();
+  const [updateProfile] = useUpdateProfileMutation();
 
-  const initialValues = {
-    socialTitle: "Md",
-    firstName: "Mahmudul",
-    lastName: "Hasan",
-    email: "hossainmdhasan626@gmail.com",
-    password: "password123",
-    newPassword: "",
-    birthDate: "17/12/2006",
+  if (isLoading) return <div>Loading your information...</div>;
+  if (isError) return <IsErrorRTK isError={isError} error={error} />;
+
+  // dataKeBerKoreAna
+  const user_Data = data?.data?.[0];
+  const user_information = {
+    id: user_Data?.id,
+    first_name: user_Data?.first_name,
+    last_name: user_Data?.last_name,
+    contact_number: user_Data?.contact_number,
+    birth_date: user_Data?.birth_date,
+    email: user_Data?.user?.email,
   };
 
-  const handleSubmit = (values, actions) => {
-    console.log("Submitting form:", values);
-    setTimeout(() => {
-      actions.setSubmitting(false);
-      alert("Information saved successfully!");
-    }, 1500);
+  // initialValuesEApiThekeAsaDataSetKorlam
+  const initialValues = {
+    socialTitle: "",
+    first_name: user_information?.first_name || "",
+    last_name: user_information?.last_name || "",
+    email: user_information?.email || "",
+    contact_number: user_information?.contact_number || "",
+    birth_date: user_information?.birth_date || "",
+  };
+
+  const handleSubmit = async (values) => {
+    try {
+      // idBerKoreUpdatePaylodEAddKora
+      const updatePayload = { id: user_information?.id, ...values };
+      // updateErJonnoApiTeHitKora
+      await updateProfile(updatePayload).unwrap();
+      alert("Information updated");
+    } catch (err) {
+      alert("Failed to update profile. Check console for details.");
+    }
   };
 
   return (
     <div className="px-4 md:px-0 bg-white">
       <Formik
+        enableReinitialize={true}
         initialValues={initialValues}
-        validationSchema={profileInformationSchema}
+        // validationSchema={profileInformationSchema}
         onSubmit={handleSubmit}
         validateOnChange={false}
         validateOnBlur={false}
@@ -48,31 +72,12 @@ const Information = () => {
             {/* Main Container */}
             <div className="bg-white rounded-lg border-2 border-gray-200 p-6 md:p-8">
               <div className="space-y-6">
-                {/* Social Title */}
-                <div className="flex flex-col md:flex-row md:items-center gap-4">
-                  <label className="md:w-32 font-semibold text-gray-900">
-                    Social title
-                  </label>
-                  <div className="flex items-center gap-6">
-                    {["Mr.", "Mrs.", "Md."].map((title) => (
-                      <div key={title} className="flex items-center">
-                        <Field
-                          type="radio"
-                          name="socialTitle"
-                          value={title}
-                          id={`title-${title}`}
-                          className="w-4 h-4 cursor-pointer accent-mainColor"
-                        />
-                        <label
-                          htmlFor={`title-${title}`}
-                          className="ml-2 text-gray-800 cursor-pointer font-medium"
-                        >
-                          {title}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                {/* img */}
+
+                <input
+                  type="file"
+                  class="file-input file-input-bordered file-input-primary w-full max-w-xs"
+                />
 
                 {/* First Name */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
@@ -82,12 +87,12 @@ const Information = () => {
                   <div className="flex-1">
                     <Field
                       type="text"
-                      name="firstName"
+                      name="first_name"
                       placeholder="First name"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
                     />
                     <ErrorMessage
-                      name="firstName"
+                      name="first_name"
                       component="p"
                       className="text-red-500 text-xs mt-1.5"
                     />
@@ -102,12 +107,12 @@ const Information = () => {
                   <div className="flex-1">
                     <Field
                       type="text"
-                      name="lastName"
+                      name="last_name"
                       placeholder="Last name"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
                     />
                     <ErrorMessage
-                      name="lastName"
+                      name="last_name"
                       component="p"
                       className="text-red-500 text-xs mt-1.5"
                     />
@@ -134,64 +139,22 @@ const Information = () => {
                   </div>
                 </div>
 
-                {/* Password */}
+                {/* number */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-32 font-semibold text-gray-900 md:pt-3">
-                    Password
-                  </label>
-                  <div className="flex-1 flex gap-2">
-                    <div className="flex-1 relative">
-                      <Field
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        placeholder="Password"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-gray-100 text-gray-900 transition-all duration-200"
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="p"
-                        className="text-red-500 text-xs mt-1.5"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200 font-semibold text-sm"
-                    >
-                      {showPassword ? "HIDE" : "SHOW"}
-                    </button>
-                  </div>
-                </div>
-
-                {/* New Password */}
-                <div className="flex flex-col md:flex-row md:items-start gap-4">
-                  <label className="md:w-32 font-semibold text-gray-900 md:pt-3">
-                    New password
+                    Number
                   </label>
                   <div className="flex-1">
-                    <div className="flex gap-2">
-                      <div className="flex-1 relative">
-                        <Field
-                          type={showNewPassword ? "text" : "password"}
-                          name="newPassword"
-                          placeholder="New password"
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
-                        />
-                        <ErrorMessage
-                          name="newPassword"
-                          component="p"
-                          className="text-red-500 text-xs mt-1.5"
-                        />
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
-                        className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200 font-semibold text-sm"
-                      >
-                        {showNewPassword ? "HIDE" : "SHOW"}
-                      </button>
-                    </div>
-                    <p className="text-sm text-gray-600 mt-2">Optional</p>
+                    <Field
+                      name="contact_number"
+                      placeholder="Number"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
+                    />
+                    <ErrorMessage
+                      name="contact_number"
+                      component="p"
+                      className="text-red-500 text-xs mt-1.5"
+                    />
                   </div>
                 </div>
 
@@ -203,7 +166,7 @@ const Information = () => {
                   <div className="flex-1">
                     <Field
                       type="text"
-                      name="birthDate"
+                      name="birth_date"
                       placeholder="DD/MM/YYYY"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
                     />
@@ -212,7 +175,7 @@ const Information = () => {
                     </p>
                     <p className="text-sm text-gray-600">Optional</p>
                     <ErrorMessage
-                      name="birthDate"
+                      name="birth_date"
                       component="p"
                       className="text-red-500 text-xs mt-1.5"
                     />

@@ -1,15 +1,13 @@
 "use client";
-
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { authData } from "@/app/redux/fecher/auth/AtuthSlice";
 import { signUpSchema } from "./schema/SignUpSchema";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useSignUpMutation } from "@/app/redux/api/auth/AuthApi";
 
 const SignUpFrom = () => {
-  const dispatch = useDispatch();
+  const [signUp] = useSignUpMutation();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -24,11 +22,28 @@ const SignUpFrom = () => {
     terms: false,
   };
 
-  const handleSubmit = (values, actions) => {
-    console.log("submitting");
-    dispatch(authData(values));
-    actions.resetForm();
-    router.push("/");
+  const handleSubmit = async (values, actions) => {
+    const formattedData = {
+      email: values.email,
+      password: values.password,
+      profile: {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        contact_number: values.number,
+        bio: "A brief about the user.",
+        location: "Bangladesh",
+        birth_date: "2000-01-01",
+      },
+    };
+    try {
+      const response = await signUp(formattedData).unwrap();
+      alert("Registration Successful");
+      actions.resetForm();
+      router.push("/signin");
+    } catch (err) {
+      console.error("Failed to sign up:", err);
+      alert(err?.data?.detail || "Registration failed. Please try again.");
+    }
   };
 
   const onClickGoogle = () => {

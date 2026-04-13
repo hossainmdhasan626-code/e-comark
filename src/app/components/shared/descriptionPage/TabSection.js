@@ -1,4 +1,4 @@
-import React from "react";
+import parse from 'html-react-parser';
 
 const TabSection = ({ product }) => {
   // averageCalculationLogic
@@ -33,7 +33,7 @@ const TabSection = ({ product }) => {
             <div className="max-h-[400px] overflow-y-auto custom-scrollbar">
               <h3 className="text-2xl font-bold mb-4">{product.title}</h3>
               <p className="text-gray-600 leading-relaxed text-lg">
-                {product.fullDescription}
+                {parse( product?.description)}
               </p>
               {product.specifications && (
                 <div className="mt-6">
@@ -63,7 +63,7 @@ const TabSection = ({ product }) => {
               <h3 className="text-2xl font-bold mb-4">Warranty & Policy</h3>
               <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100">
                 <p className="text-xl font-bold text-blue-900 mb-4">
-                  {product.warranty}
+                  {parse(product?.warranty)}
                 </p>
                 <ul className="list-disc pl-5 space-y-3 text-gray-700 text-lg">
                   {product.warrantyDetails?.map((detail, index) => (

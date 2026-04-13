@@ -1,38 +1,35 @@
-import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import CardData from "../../../../../data/CardData";
 
 export const productApi = createApi({
   reducerPath: "productApi",
-  baseQuery: fakeBaseQuery(),
+  baseQuery: fetchBaseQuery({
+    baseUrl: "https://ecomark-django.onrender.com/api/v1",
+  }),
+  tagTypes: ["Default", "Filtar", "Search", "Details"],
   endpoints: (builder) => ({
     // etaSobCardErDataProvidKore
     getProducts: builder.query({
-      queryFn: () => {
-        try {
-          return { data: CardData };
-        } catch (error) {
-          return { error: { status: 500, data: "Data loading failed" } };
-        }
-      },
+      query: () => "/product-category/",
+      providesTags: ["Default"],
     }),
 
     // cardDetailsPageThekeParamsErIdTaNewThanOiIdOnuJaiCardErDataReturnKore
-    getFilterProducts: builder.query({
-      queryFn: (id) => {
-        try {
-          const filtered = CardData.find(
-            (product) => product.id === Number(id),
-          );
+    getFilterProductsDetails: builder.query({
+      query: (id) => `/products/${id}/`,
+      providesTags: ["Details"],
+    }),
 
-          if (!filtered) {
-            return { error: { status: 404, data: "Product not found" } };
-          }
+    getProductsBySubCategory: builder.query({
+      query: ({ cat_Id, sub_Id }) =>
+        `/product-category/${cat_Id}/sub-category/${sub_Id}/products/`,
+      providesTags: ["Filtar"],
+    }),
 
-          return { data: filtered };
-        } catch (error) {
-          return { error: { status: 500, data: "Server Error" } };
-        }
-      },
+    // searchThekeCartBerKora
+    getProductsBySearch: builder.query({
+      query: ({ search_params }) => `/products/?search=${search_params}`,
+      providesTags: ["Search"],
     }),
 
     // reviewAddKorleEkhanThekeCardDataTeAddKoraHoy
@@ -55,7 +52,9 @@ export const productApi = createApi({
 });
 
 export const {
-  useLazyGetProductsQuery,
-  useGetFilterProductsQuery,
+  useGetProductsQuery,
+  useGetFilterProductsDetailsQuery,
   useAddReviewMutation,
+  useGetProductsBySearchQuery,
+  useGetProductsBySubCategoryQuery,
 } = productApi;

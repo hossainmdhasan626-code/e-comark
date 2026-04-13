@@ -8,6 +8,12 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'ecomark-django.onrender.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
