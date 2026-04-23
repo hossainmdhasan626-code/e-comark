@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Logo from "../../ui(reusable)/Logo";
 import ShoppingCard from "./ShoppingCard";
 import NavbarSmOrMd from "../navbar/NavbarSmOrMd";
@@ -12,7 +11,8 @@ import AuthBtn from "../../ui(reusable)/AuthBtn";
 
 const Header = ({ drawerItems }) => {
   const user = useSelector((state) => state.auth);
-
+  // const getDataFormLocalStoreg = localStorage.getItem("token");
+  // const getAccessToken = JSON.parse(getDataFormLocalStoreg);
   return (
     <>
       <div className="md:flex md:justify-between md:items-center md:mx-7">
@@ -33,7 +33,7 @@ const Header = ({ drawerItems }) => {
             <ShoppingCard />
           </div>
 
-          {user?.fullName ? (
+          {user?.access ? (
             <Link href="/profile">
               {/* profileBtn */}
               <ButtonWrapper>

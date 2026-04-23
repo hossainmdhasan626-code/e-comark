@@ -11,10 +11,41 @@ import "swiper/css/navigation";
 // import required modules
 import { Pagination, Navigation } from "swiper/modules";
 import Image from "next/image";
-import carouselData from "../../../../../data/CarouselData";
 import Link from "next/link";
+import { useGetCarouselDataQuery } from "@/app/redux/api/carousel/CarouselApi";
+import CarosualSkeleton from "../skeleton/CarosualSkeleton";
+import IsErrorRTK from "../../ui(reusable)/IsErrorRTK";
 
 export default function Carousel() {
+  // RTK
+  const {
+    data: carouselDataByRtk,
+    isLoading,
+    isError,
+    error,
+  } = useGetCarouselDataQuery();
+
+  // jodiCarouselErDataAsteDeriHoy
+  if (isLoading) {
+    return <CarosualSkeleton />;
+  }
+
+  // jodiErrorHoy
+  if (isError) {
+    return <IsErrorRTK isError={isError} error={error} />;
+  }
+
+  if (!carouselDataByRtk || carouselDataByRtk.length === 0) {
+    return (
+      <div className="h-[400px] flex items-center justify-center bg-gray-100 rounded-xl">
+        <p className="text-gray-500">There are no offers at the moment!</p>
+      </div>
+    );
+  }
+
+  // resultKeberKoraApiResponseThek
+  const carouselData = carouselDataByRtk?.results;
+
   return (
     <div className="h-full">
       <Swiper
@@ -28,7 +59,7 @@ export default function Carousel() {
         modules={[Pagination, Navigation]}
         className="mySwiper text-center h-full"
       >
-        {carouselData.map((product) => (
+        {carouselData?.map((product) => (
           <SwiperSlide key={product?.id}>
             <div className="relative w-full h-full">
               <Image

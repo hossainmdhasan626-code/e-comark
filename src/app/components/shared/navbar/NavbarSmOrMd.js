@@ -7,9 +7,13 @@ import { useSelector } from "react-redux";
 import SignInOut from "../header/SignInUp";
 import Link from "next/link";
 import ShoppingCard from "../header/ShoppingCard";
+import { useGetProductsQuery } from "@/app/redux/api/cart/cartApi";
 
 const NavbarSmOrMd = ({ drawerItems }) => {
   const user = useSelector((state) => state.auth);
+  const { data: cartData, isLoading: isCartLoading } = useGetProductsQuery();
+
+  const sidbarLavel = cartData?.results?.map((results) => results) || [];
 
   return (
     <Suspense fallback={<div>Loading Navigation...</div>}>
@@ -20,7 +24,7 @@ const NavbarSmOrMd = ({ drawerItems }) => {
           {/* inThisWrapperWithMainColorComponentWasForMdScreen */}
           <div className="w-full flex justify-around items-center">
             <div className="text-white">
-              <Sidbar drawerItems={drawerItems} />
+              <Sidbar drawerItems={sidbarLavel} />
             </div>
 
             <div>
@@ -30,7 +34,7 @@ const NavbarSmOrMd = ({ drawerItems }) => {
             <div className="flex">
               {/* shopingCart */}
               <ShoppingCard />
-              {user?.fullName ? (
+              {user?.access ? (
                 <Link href={"/profile"}>
                   <label
                     htmlFor="my-drawer-5"

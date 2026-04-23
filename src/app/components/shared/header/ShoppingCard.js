@@ -7,7 +7,7 @@ const ShoppingCard = () => {
   const { data: cartItems = [] } = useGetCartItemsQuery();
 
   return (
-    <Link href="/profile?PROFILE_TAB=SAVED%20CARTS">
+    <Link href="/addToCard">
       <ButtonWrapper>
         <div className="indicator flex justify-center items-center w-5 md:w-14">
           {/* ব্যাজের নতুন স্টাইল */}

@@ -6,7 +6,6 @@ import SidebarForUpperThanSm from "../sidbarForUpperThanSm/SidebarForUpperThanSm
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { PROFILE_COMPONENTS } from "../../../../../data/PROFILE_COMPONENTS";
-import Link from "next/link";
 import Breadcrumbs from "../../ui(reusable)/Breadcrumbs";
 
 const SidbarAndMainContaint = ({
@@ -17,18 +16,16 @@ const SidbarAndMainContaint = ({
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get("PROFILE_TAB");
-
+  const urlSearchParams = new URLSearchParams();
   const onItemClick = (item) => {
     if (!item) return;
 
-    if (item.type === "PROFILE_TAB") {
+    if (item?.type === "PROFILE_TAB") {
       router.push(`?PROFILE_TAB=${item?.name}`);
-      console.log(`State was set: ${item.name}`);
     }
-
-    if (item.type === "CATEGORY") {
-      console.log(`query was createed: ${item.name}`);
-    }
+    if (item?.cat_Id && item?.sub_Id) {
+      router.push(`?cat_Id=${item?.cat_Id}&sub_Id=${item?.sub_Id}`);
+    } 
   };
 
   const RendaredComponentInProfilePage = PROFILE_COMPONENTS[activeTab];

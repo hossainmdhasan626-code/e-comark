@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAddToCartMutation } from "@/app/redux/api/cart/AddtoCartApi";
 import IsExistInAddToCartBtn from "./IsExistInAddToCartBtn";
+import parse from 'html-react-parser';
+
 
 const Card = ({ item }) => {
   const [addToCart, { isLoading }] = useAddToCartMutation();
@@ -22,9 +24,9 @@ const Card = ({ item }) => {
       <div className="card bg-base-100 shadow-sm border border-gray-100 overflow-hidden">
         <figure className="bg-gray-200 h-48 w-full flex items-center justify-center relative overflow-hidden">
           <Link href={`productDetails/${item?.id}`}>
-            {item?.images[0] ? (
+            {item?.images ? (
               <Image
-              src={item?.images[0]}
+                src={item?.images}
                 alt={item?.title || "Product image"}
                 fill
                 className="object-cover"
@@ -39,12 +41,13 @@ const Card = ({ item }) => {
         </figure>
 
         <div className="card-body p-5">
-          <h2 className="card-title text-lg font-bold">
-            {item?.title || "Product Title"}
-          </h2>
-
+          <Link href={`productDetails/${item?.id}`}>
+            <h2 className="card-title text-lg font-bold">
+              {item?.title || "Product Title"}
+            </h2>
+          </Link>
           <p className="text-sm text-gray-600 line-clamp-2">
-            {item?.description ||
+            {parse(item?.description) ||
               "A card component has a figure, a body part, and inside body there are title and actions parts."}
           </p>
 

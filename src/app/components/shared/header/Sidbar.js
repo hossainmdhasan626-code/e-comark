@@ -11,11 +11,8 @@ const Sidbar = ({ drawerItems }) => {
 
     if (item.type === "PROFILE_TAB") {
       router.push(`?PROFILE_TAB=${item?.name}`);
-      console.log(`State was set: ${item.name}`);
-    }
-
-    if (item.type === "CATEGORY") {
-      console.log(`query was createed: ${item.name}`);
+    } else {
+      router.push(`?cat_Id=${item?.cat_Id}&sub_Id=${item?.sub_Id}`);
     }
 
     const drawerCheckbox = document.getElementById("my-drawer-5");
@@ -63,7 +60,7 @@ const Sidbar = ({ drawerItems }) => {
         {/* drawerMenuContent */}
         <ul className="menu bg-mainColor min-h-full w-80 p-4 flex flex-col gap-3 text-white">
           {drawerItems.map((item) => {
-            return item?.children ? (
+            return item?.sub_categories ? (
               <li key={item?.id}>
                 <details>
                   <summary className="btn bg-mainColor border-2 border-white text-white hover:bg-[#1a1a1a] transition-all flex justify-between items-center w-full after:text-white">
@@ -72,9 +69,17 @@ const Sidbar = ({ drawerItems }) => {
 
                   {/* SubMenu */}
                   <ul className="mt-2 ml-4 border-l-2 border-white pl-2 flex flex-col gap-2">
-                    {item.children.map((childItem) => (
+                    {item?.sub_categories.map((childItem) => (
                       <li key={childItem?.id}>
-                        <button className="btn btn-sm border-2 justify-start bg-mainColor text-white border-white hover:bg-[#1a1a1a] transition-all w-full">
+                        <button
+                          onClick={() =>
+                            onItemClick({
+                              cat_Id: item?.id,
+                              sub_Id: childItem?.id,
+                            })
+                          }
+                          className="btn btn-sm border-2 justify-start bg-mainColor text-white border-white hover:bg-[#1a1a1a] transition-all w-full"
+                        >
                           {childItem?.name}
                         </button>
                       </li>

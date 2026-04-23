@@ -1,7 +1,7 @@
 "use client";
 import { use, useState } from "react";
 import Link from "next/link";
-import { useGetFilterProductsQuery } from "@/app/redux/api/cart/cartApi";
+import { useGetFilterProductsDetailsQuery } from "@/app/redux/api/cart/cartApi";
 import {
   useAddToCartMutation,
   useIncludesItemInCartListQuery,
@@ -11,10 +11,11 @@ import InnerImageZoom from "react-inner-image-zoom";
 import "inner-image-zoom/lib/styles.min.css";
 import TabSection from "@/app/components/shared/descriptionPage/TabSection";
 import Image from "next/image";
+import parse from 'html-react-parser';
 
 const ProductDetails = ({ params }) => {
   const unwrappedParams = use(params);
-  const id = unwrappedParams.id;
+  const id = unwrappedParams?.id;
 
   const [quantity, setQuantity] = useState(1);
 
@@ -23,7 +24,7 @@ const ProductDetails = ({ params }) => {
 
   // paramsEAsaIdThekeOiProductBerKorarJOnno
   const { data: product, isLoading: filterProductIsLoading } =
-    useGetFilterProductsQuery(id);
+    useGetFilterProductsDetailsQuery(id);
 
   // addToCartEAddErJonno
   const [addToCart, { isLoading: addToCartIsLoading }] = useAddToCartMutation();
@@ -65,7 +66,7 @@ const ProductDetails = ({ params }) => {
     );
 
   //defaultImgSetKorlam
-  const currentImage = activeImg || product?.images[0];
+  const currentImage = activeImg || product?.image[0];
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -84,8 +85,8 @@ const ProductDetails = ({ params }) => {
             </div>
 
             {/* chotoClickErImgGuli */}
-            <div className="grid grid-cols-5 gap-2 mt-4">
-              {product?.images?.map((img, index) => (
+            {/* <div className="grid grid-cols-5 gap-2 mt-4">
+              {product?.image?.map((img, index) => (
                 <div
                   key={index}
                   onClick={() => setActiveImg(img)}
@@ -104,7 +105,7 @@ const ProductDetails = ({ params }) => {
                   />
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
 
           <div className="md:w-1/2 p-8 self-center">
@@ -115,14 +116,14 @@ const ProductDetails = ({ params }) => {
               / {product.category}
             </nav>
             <h1 className="text-4xl font-extrabold text-gray-900">
-              {product.title}
+              {product?.name}
             </h1>
             <p className="text-3xl font-bold text-mainColor my-4">
-              ${product.price}
+              ${product?.sale_price}
             </p>
 
             <p className="text-gray-500 line-clamp-2 mb-6">
-              {product.shortDescription}
+              {parse(product?.description)}
             </p>
 
             <div className="flex flex-col gap-3 mb-8">

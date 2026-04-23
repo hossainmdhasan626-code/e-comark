@@ -1,24 +1,48 @@
 "use client";
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import  { useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "./schema/SignInSchema";
+import { useSignInMutation } from "@/app/redux/api/auth/AuthApi";
+import { useDispatch } from "react-redux";
+import { authData } from "@/app/redux/fecher/auth/AtuthSlice";
 
 const SignInForm = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-
+  // rtk
+  const [signIn] = useSignInMutation();
+  const dispatch = useDispatch();
   const initialValues = {
     email: "",
     password: "",
   };
 
-  const handleSubmit = (values, actions) => {
-    console.log("Logging in with:", values);
-    actions.setSubmitting(false);
-    router.push("/");
+  const handleSubmit = async (values, actions) => {
+    try {
+      // RTKkeKUserErDeyaCredentialDataDewya
+      const response = await signIn(values).unwrap();
+
+      // apiErResponseThekeTokenDuitaKeBerKoreNiyeAsa
+      const token = { access: response?.access, refresh: response?.refresh };
+      alert("SignIn Successful");
+
+      //apadatoDevelopmentErJonnoReduxEPathalam
+      dispatch(authData(token));
+
+      // localStorageESaveHocche
+      // localStorage.setItem("token", JSON.stringify(token));
+
+      // logInHoyGeleFormClearHoyeJave
+      actions.resetForm();
+
+      // uporerSobThikMotoHole"/"JawarJonno
+      router.push("/");
+    } catch (err) {
+      alert(err?.data?.detail || "SignIn failed. Please try again.");
+    }
   };
 
   const onClickGoogle = () => {
