@@ -7,22 +7,56 @@ export const productApi = createApi({
   endpoints: (builder) => ({
     // etaSobCardErDataProvidKore
     getProducts: builder.query({
-      queryFn: () => {
+      queryFn: async () => {
         try {
-          return { data: CardData };
+          const response = await fetch("http://127.0.0.1:8000/api/v1/product-category/");
+          const data = await response.json();
+          
+          const allProducts = [];
+          if (data?.results) {
+            data.results.forEach((category) => {
+              category.sub_categories?.forEach((subCategory) => {
+                subCategory.products?.forEach((product) => {
+                  allProducts.push(product);
+                });
+              });
+            });
+            return { data: allProducts };
+          } else {
+            // Fallback to local data if API structure doesn't match
+            return { data: CardData };
+          }
         } catch (error) {
-          return { error: { status: 500, data: "Data loading failed" } };
+          // Fallback to local data if API fails
+          return { data: CardData };
         }
       },
     }),
 
     // cardDetailsPageThekeParamsErIdTaNewThanOiIdOnuJaiCardErDataReturnKore
     getFilterProducts: builder.query({
-      queryFn: (id) => {
+      queryFn: async (id) => {
         try {
-          const filtered = CardData.find(
-            (product) => product.id === Number(id),
-          );
+          const response = await fetch("http://127.0.0.1:8000/api/v1/product-category/");
+          const data = await response.json();
+          
+          let filtered = null;
+          if (data?.results) {
+            data.results.forEach((category) => {
+              category.sub_categories?.forEach((subCategory) => {
+                subCategory.products?.forEach((product) => {
+                  if (product.id === Number(id)) {
+                    filtered = product;
+                  }
+                });
+              });
+            });
+          }
+
+          // Fallback to local data if not found in API
+          if (!filtered) {
+            filtered = CardData.find((product) => product.id === Number(id));
+          }
 
           if (!filtered) {
             return { error: { status: 404, data: "Product not found" } };
@@ -30,7 +64,12 @@ export const productApi = createApi({
 
           return { data: filtered };
         } catch (error) {
-          return { error: { status: 500, data: "Server Error" } };
+          // Fallback to local data if API fails
+          const filtered = CardData.find((product) => product.id === Number(id));
+          if (!filtered) {
+            return { error: { status: 404, data: "Product not found" } };
+          }
+          return { data: filtered };
         }
       },
     }),
@@ -48,7 +87,7 @@ export const productApi = createApi({
           return product;
         });
         alert(JSON.stringify(updatedReview));
-        return updatedReview;
+        return { data: updatedReview };
       },
     }),
   }),

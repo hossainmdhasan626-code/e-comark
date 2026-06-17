@@ -17,8 +17,8 @@ const CartRendar = () => {
       {isCartLoading
         ? [...Array(10)].map((_, i) => <CartSkeleton key={i} />)
         : data?.map((item) => {
-            return <Card key={item?.id} item={item} />;
-          })}
+          return <Card key={item?.id} item={item} />;
+        })}
     </div>
   );
 };
