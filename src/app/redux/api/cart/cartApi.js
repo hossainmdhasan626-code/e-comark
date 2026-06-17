@@ -7,26 +7,56 @@ export const productApi = createApi({
   endpoints: (builder) => ({
     // etaSobCardErDataProvidKore
     getProducts: builder.query({
-      queryFn: async () => {
+      queryFn: async (args) => {
+        const { categoryId, subcategoryId } = args || {};
         try {
           let url = "http://127.0.0.1:8000/api/v1/product-category/";
+          
+          if (categoryId && subcategoryId) {
+            url = `http://127.0.0.1:8000/api/v1/product-category/${categoryId}/sub-category/${subcategoryId}/products/`;
+          } else if (categoryId) {
+            url = `http://127.0.0.1:8000/api/v1/product-category/${categoryId}/`;
+          }
+
           const allProducts = [];
           
           while (url) {
             const response = await fetch(url);
             const data = await response.json();
             
-            if (data?.results) {
-              data.results.forEach((category) => {
-                category.sub_categories?.forEach((subCategory) => {
-                  subCategory.products?.forEach((product) => {
-                    allProducts.push(product);
-                  });
-                });
-              });
-              url = data.next;
+            const extractProducts = (obj) => {
+              if (!obj) return;
+              if (obj.products && Array.isArray(obj.products)) {
+                obj.products.forEach(p => allProducts.push(p));
+              }
+              if (obj.sub_categories && Array.isArray(obj.sub_categories)) {
+                obj.sub_categories.forEach(extractProducts);
+              }
+            };
+
+            if (categoryId && subcategoryId) {
+              // specific subcategory products endpoint returns a list of products
+              if (data?.results && Array.isArray(data.results)) {
+                data.results.forEach((product) => allProducts.push(product));
+                url = data.next;
+              } else if (Array.isArray(data)) {
+                data.forEach((product) => allProducts.push(product));
+                url = null;
+              } else {
+                url = null;
+              }
+            } else if (categoryId) {
+              // single category endpoint returns a category object
+              extractProducts(data);
+              url = null; // not paginated
             } else {
-              url = null; // Break loop if results format is unexpected
+              // all categories endpoint is paginated
+              if (data?.results) {
+                data.results.forEach(extractProducts);
+                url = data.next;
+              } else {
+                url = null;
+              }
             }
           }
 

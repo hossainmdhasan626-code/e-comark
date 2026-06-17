@@ -6,7 +6,28 @@ import SidbarForSm from "../../../data/SidbarForSm";
 import SidbarAndMainContaint from "../components/shared/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaint";
 import { Suspense } from "react";
 
-const layout = ({ children }) => {
+const layout = async ({ children }) => {
+  let dynamicSidbar = SidbarForSm;
+  try {
+    const res = await fetch("http://127.0.0.1:8000/api/v1/product-category/", { cache: 'no-store' });
+    const data = await res.json();
+    if (data?.results) {
+      dynamicSidbar = data.results.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        type: "CATEGORY",
+        children: cat.sub_categories?.map(sub => ({
+          id: sub.id,
+          name: sub.name,
+          type: "SUBCATEGORY",
+          parentId: cat.id
+        }))
+      }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch categories for sidebar:", error);
+  }
+
   return (
     <>
       <Header drawerItems={NavbarAndSidbarSmItems}/>
@@ -18,7 +39,7 @@ const layout = ({ children }) => {
           breadcrumbs={[
             { label: "Home", link: "/" },
           ]}
-          sidbarContaint={SidbarForSm}
+          sidbarContaint={dynamicSidbar}
           mainContaint={children}
         />
       </Suspense>

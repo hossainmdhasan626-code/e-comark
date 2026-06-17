@@ -3,6 +3,7 @@ import { useLazyGetProductsQuery } from "@/app/redux/api/cart/cartApi";
 import Card from "../../ui(reusable)/Card";
 import { useEffect, useState } from "react";
 import CartSkeleton from "../skeleton/CartSkeleton";
+import { useSearchParams } from "next/navigation";
 
 const CartRendar = () => {
   const [fetchCartData, { data, isLoading: isCartLoading }] =
@@ -10,9 +11,14 @@ const CartRendar = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
 
+  const searchParams = useSearchParams();
+  const categoryId = searchParams.get("category");
+  const subcategoryId = searchParams.get("subcategory");
+
   useEffect(() => {
-    fetchCartData();
-  }, [fetchCartData]);
+    fetchCartData({ categoryId, subcategoryId });
+    setCurrentPage(1);
+  }, [fetchCartData, categoryId, subcategoryId]);
 
   const totalPages = data ? Math.ceil(data.length / itemsPerPage) : 0;
   const startIndex = (currentPage - 1) * itemsPerPage;

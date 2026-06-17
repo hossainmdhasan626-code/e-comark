@@ -27,7 +27,13 @@ const SidbarAndMainContaint = ({
     }
 
     if (item.type === "CATEGORY") {
-      console.log(`query was createed: ${item.name}`);
+      router.push(`?category=${item?.id}`);
+      console.log(`Category query was created: ${item.name}`);
+    }
+
+    if (item.type === "SUBCATEGORY") {
+      router.push(`?category=${item?.parentId}&subcategory=${item?.id}`);
+      console.log(`Subcategory query was created: ${item.name}`);
     }
   };
 

@@ -24,7 +24,7 @@ const MenuComponentFormDaisy = ({ itemsRendard, onItemClick }) => {
                         className="btn btn-sm border-2 justify-start bg-mainColor
                               text-white border-white hover:bg-[#1a1a1a]
                               transition-all w-full"
-                        onClick={() => onItemClick(items)}
+                        onClick={() => onItemClick(child)}
                       >
                         {child?.name}
                       </a>
