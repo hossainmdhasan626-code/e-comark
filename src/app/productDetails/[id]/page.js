@@ -65,7 +65,8 @@ const ProductDetails = ({ params }) => {
     );
 
   //defaultImgSetKorlam
-  const currentImage = activeImg || product?.images[0];
+  const currentImage = activeImg || product?.image || (product?.images && product?.images[0]);
+  const productImages = product?.image ? [product.image] : (product?.images || []);
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -85,7 +86,7 @@ const ProductDetails = ({ params }) => {
 
             {/* chotoClickErImgGuli */}
             <div className="grid grid-cols-5 gap-2 mt-4">
-              {product?.images?.map((img, index) => (
+              {productImages.map((img, index) => (
                 <div
                   key={index}
                   onClick={() => setActiveImg(img)}
@@ -112,18 +113,19 @@ const ProductDetails = ({ params }) => {
               <Link href="/" className="hover:text-mainColor">
                 Shop
               </Link>
-              / {product.category}
+              {product?.category && ` / ${product.category}`}
             </nav>
             <h1 className="text-4xl font-extrabold text-gray-900">
-              {product.title}
+              {product?.title || product?.name}
             </h1>
             <p className="text-3xl font-bold text-mainColor my-4">
-              ${product.price}
+              ${product?.price}
             </p>
 
-            <p className="text-gray-500 line-clamp-2 mb-6">
-              {product.shortDescription}
-            </p>
+            <div 
+              className="text-gray-500 line-clamp-3 mb-6"
+              dangerouslySetInnerHTML={{ __html: product?.description || product?.shortDescription }}
+            />
 
             <div className="flex flex-col gap-3 mb-8">
               <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
