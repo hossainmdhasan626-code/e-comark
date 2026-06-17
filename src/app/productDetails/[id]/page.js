@@ -11,24 +11,20 @@ import InnerImageZoom from "react-inner-image-zoom";
 import "inner-image-zoom/lib/styles.min.css";
 import TabSection from "@/app/components/shared/descriptionPage/TabSection";
 import Image from "next/image";
+import Breadcrumbs from "@/app/components/ui(reusable)/Breadcrumbs";
 
 const ProductDetails = ({ params }) => {
   const unwrappedParams = use(params);
   const id = unwrappedParams.id;
 
   const [quantity, setQuantity] = useState(1);
-
-  // imgErJonno
   const [activeImg, setActiveImg] = useState(null);
 
-  // paramsEAsaIdThekeOiProductBerKorarJOnno
   const { data: product, isLoading: filterProductIsLoading } =
     useGetFilterProductsQuery(id);
 
-  // addToCartEAddErJonno
   const [addToCart, { isLoading: addToCartIsLoading }] = useAddToCartMutation();
 
-  // descriptionPageThekeQuantityHandleErJonno
   const handleQuantity = (type) => {
     if (type === "plus") {
       setQuantity((prev) => prev + 1);
@@ -37,7 +33,6 @@ const ProductDetails = ({ params }) => {
     }
   };
 
-  // addToCartEAddErJonno
   const handleAddToCart = async () => {
     try {
       for (let i = 0; i < quantity; i++) {
@@ -64,13 +59,41 @@ const ProductDetails = ({ params }) => {
       </div>
     );
 
-  //defaultImgSetKorlam
   const currentImage = activeImg || product?.image || (product?.images && product?.images[0]);
   const productImages = product?.image ? [product.image] : (product?.images || []);
+
+  const dynamicBreadcrumbs = [
+    { label: "Home", link: "/" }
+  ];
+
+  if (product?.categoryInfo) {
+    dynamicBreadcrumbs.push({ 
+      label: product.categoryInfo.name, 
+      link: `/?category=${product.categoryInfo.id}` 
+    });
+  }
+
+  if (product?.subCategoryInfo) {
+    dynamicBreadcrumbs.push({ 
+      label: product.subCategoryInfo.name, 
+      link: `/?category=${product.categoryInfo?.id}&subcategory=${product.subCategoryInfo.id}` 
+    });
+  }
+
+  dynamicBreadcrumbs.push({ 
+    label: product?.title || product?.name, 
+    link: null 
+  });
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-6xl mx-auto space-y-8">
+        
+        {/* Dynamic Breadcrumbs */}
+        <div className="-ml-[90px]">
+          <Breadcrumbs breadcrumbs={dynamicBreadcrumbs} />
+        </div>
+
         <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100 flex flex-col md:flex-row">
           <div className="md:w-1/2 p-6 bg-gray-100">
             {/* mainImg */}
@@ -109,13 +132,7 @@ const ProductDetails = ({ params }) => {
           </div>
 
           <div className="md:w-1/2 p-8 self-center">
-            <nav className="text-sm text-gray-400 mb-2">
-              <Link href="/" className="hover:text-mainColor">
-                Shop
-              </Link>
-              {product?.category && ` / ${product.category}`}
-            </nav>
-            <h1 className="text-4xl font-extrabold text-gray-900">
+            <h1 className="text-4xl font-extrabold text-gray-900 mt-2">
               {product?.title || product?.name}
             </h1>
             <p className="text-3xl font-bold text-mainColor my-4">

@@ -93,14 +93,18 @@ export const productApi = createApi({
                 category.sub_categories?.forEach((subCategory) => {
                   subCategory.products?.forEach((product) => {
                     if (product.id === Number(id)) {
-                      filtered = product;
+                      filtered = { 
+                        ...product, 
+                        categoryInfo: { id: category.id, name: category.name },
+                        subCategoryInfo: { id: subCategory.id, name: subCategory.name }
+                      };
                     }
                   });
                 });
               });
               url = data.next;
             } else {
-              url = null;
+              url = null; // Break loop if results format is unexpected
             }
           }
 
@@ -116,11 +120,13 @@ export const productApi = createApi({
           return { data: filtered };
         } catch (error) {
           // Fallback to local data if API fails
-          const filtered = CardData.find((product) => product.id === Number(id));
-          if (!filtered) {
+          const fallbackProduct = CardData.find(
+            (product) => product.id === Number(id)
+          );
+          if (!fallbackProduct) {
             return { error: { status: 404, data: "Product not found" } };
           }
-          return { data: filtered };
+          return { data: fallbackProduct };
         }
       },
     }),

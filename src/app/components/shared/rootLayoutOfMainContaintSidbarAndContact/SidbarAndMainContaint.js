@@ -17,6 +17,8 @@ const SidbarAndMainContaint = ({
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = searchParams.get("PROFILE_TAB");
+  const categoryId = searchParams.get("category");
+  const subcategoryId = searchParams.get("subcategory");
 
   const onItemClick = (item) => {
     if (!item) return;
@@ -39,11 +41,36 @@ const SidbarAndMainContaint = ({
 
   const RendaredComponentInProfilePage = PROFILE_COMPONENTS[activeTab];
 
+  // Dynamically compute breadcrumbs
+  const dynamicBreadcrumbs = [...(breadcrumbs || [])];
+  
+  if (sidbarContaint) {
+    if (activeTab) {
+      const tabItem = sidbarContaint.find(t => t.name === activeTab);
+      if (tabItem) {
+        dynamicBreadcrumbs.push({ label: tabItem.name, link: null });
+      } else {
+        dynamicBreadcrumbs.push({ label: activeTab, link: null });
+      }
+    } else if (categoryId) {
+      const cat = sidbarContaint.find(c => c.id.toString() === categoryId);
+      if (cat) {
+        dynamicBreadcrumbs.push({ label: cat.name, link: `/?category=${cat.id}` });
+        if (subcategoryId && cat.children) {
+          const sub = cat.children.find(s => s.id.toString() === subcategoryId);
+          if (sub) {
+            dynamicBreadcrumbs.push({ label: sub.name, link: null }); // last item usually has no link or links to itself
+          }
+        }
+      }
+    }
+  }
+
   return (
     <div className="md:flex">
       <div className="md:w-[30%]">
         {/* Breadcrumbs */}
-        <Breadcrumbs breadcrumbs={breadcrumbs} />
+        <Breadcrumbs breadcrumbs={dynamicBreadcrumbs} />
 
         {/* thisComponetSidbarWasRendarForTheMd/Lg/XlScreen */}
         <SidebarForUpperThanSm
