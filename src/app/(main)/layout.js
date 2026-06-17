@@ -9,7 +9,8 @@ import { Suspense } from "react";
 const layout = async ({ children }) => {
   let dynamicSidbar = SidbarForSm;
   try {
-    const res = await fetch("http://127.0.0.1:8000/api/v1/product-category/", { cache: 'no-store' });
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:8000/api/v1";
+    const res = await fetch(`${baseUrl}/product-category/`, { cache: 'no-store' });
     const data = await res.json();
     if (data?.results) {
       dynamicSidbar = data.results.map(cat => ({

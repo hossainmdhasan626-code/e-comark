@@ -10,14 +10,15 @@ export const productApi = createApi({
       queryFn: async (args) => {
         const { categoryId, subcategoryId, searchQuery } = args || {};
         try {
-          let url = "http://127.0.0.1:8000/api/v1/product-category/";
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:8000/api/v1";
+          let url = `${baseUrl}/product-category/`;
           
           if (searchQuery) {
-            url = `http://127.0.0.1:8000/api/v1/products/?search=${encodeURIComponent(searchQuery)}`;
+            url = `${baseUrl}/products/?search=${encodeURIComponent(searchQuery)}`;
           } else if (categoryId && subcategoryId) {
-            url = `http://127.0.0.1:8000/api/v1/product-category/${categoryId}/sub-category/${subcategoryId}/products/`;
+            url = `${baseUrl}/product-category/${categoryId}/sub-category/${subcategoryId}/products/`;
           } else if (categoryId) {
-            url = `http://127.0.0.1:8000/api/v1/product-category/${categoryId}/`;
+            url = `${baseUrl}/product-category/${categoryId}/`;
           }
 
           const allProducts = [];
@@ -79,7 +80,8 @@ export const productApi = createApi({
     getFilterProducts: builder.query({
       queryFn: async (id) => {
         try {
-          let url = "http://127.0.0.1:8000/api/v1/product-category/";
+          const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:8000/api/v1";
+          let url = `${baseUrl}/product-category/`;
           let filtered = null;
           
           while (url && !filtered) {
