@@ -14,11 +14,12 @@ const CartRendar = () => {
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("category");
   const subcategoryId = searchParams.get("subcategory");
+  const searchQuery = searchParams.get("search");
 
   useEffect(() => {
-    fetchCartData({ categoryId, subcategoryId });
+    fetchCartData({ categoryId, subcategoryId, searchQuery });
     setCurrentPage(1);
-  }, [fetchCartData, categoryId, subcategoryId]);
+  }, [fetchCartData, categoryId, subcategoryId, searchQuery]);
 
   const totalPages = data ? Math.ceil(data.length / itemsPerPage) : 0;
   const startIndex = (currentPage - 1) * itemsPerPage;

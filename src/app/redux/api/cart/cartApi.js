@@ -8,11 +8,13 @@ export const productApi = createApi({
     // etaSobCardErDataProvidKore
     getProducts: builder.query({
       queryFn: async (args) => {
-        const { categoryId, subcategoryId } = args || {};
+        const { categoryId, subcategoryId, searchQuery } = args || {};
         try {
           let url = "http://127.0.0.1:8000/api/v1/product-category/";
           
-          if (categoryId && subcategoryId) {
+          if (searchQuery) {
+            url = `http://127.0.0.1:8000/api/v1/products/?search=${encodeURIComponent(searchQuery)}`;
+          } else if (categoryId && subcategoryId) {
             url = `http://127.0.0.1:8000/api/v1/product-category/${categoryId}/sub-category/${subcategoryId}/products/`;
           } else if (categoryId) {
             url = `http://127.0.0.1:8000/api/v1/product-category/${categoryId}/`;
@@ -34,7 +36,7 @@ export const productApi = createApi({
               }
             };
 
-            if (categoryId && subcategoryId) {
+            if (searchQuery || (categoryId && subcategoryId)) {
               // specific subcategory products endpoint returns a list of products
               if (data?.results && Array.isArray(data.results)) {
                 data.results.forEach((product) => allProducts.push(product));
