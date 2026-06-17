@@ -9,21 +9,31 @@ export const productApi = createApi({
     getProducts: builder.query({
       queryFn: async () => {
         try {
-          const response = await fetch("http://127.0.0.1:8000/api/v1/product-category/");
-          const data = await response.json();
-          
+          let url = "http://127.0.0.1:8000/api/v1/product-category/";
           const allProducts = [];
-          if (data?.results) {
-            data.results.forEach((category) => {
-              category.sub_categories?.forEach((subCategory) => {
-                subCategory.products?.forEach((product) => {
-                  allProducts.push(product);
+          
+          while (url) {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data?.results) {
+              data.results.forEach((category) => {
+                category.sub_categories?.forEach((subCategory) => {
+                  subCategory.products?.forEach((product) => {
+                    allProducts.push(product);
+                  });
                 });
               });
-            });
+              url = data.next;
+            } else {
+              url = null; // Break loop if results format is unexpected
+            }
+          }
+
+          if (allProducts.length > 0) {
             return { data: allProducts };
           } else {
-            // Fallback to local data if API structure doesn't match
+            // Fallback to local data if API returns empty structure
             return { data: CardData };
           }
         } catch (error) {
@@ -37,20 +47,27 @@ export const productApi = createApi({
     getFilterProducts: builder.query({
       queryFn: async (id) => {
         try {
-          const response = await fetch("http://127.0.0.1:8000/api/v1/product-category/");
-          const data = await response.json();
-          
+          let url = "http://127.0.0.1:8000/api/v1/product-category/";
           let filtered = null;
-          if (data?.results) {
-            data.results.forEach((category) => {
-              category.sub_categories?.forEach((subCategory) => {
-                subCategory.products?.forEach((product) => {
-                  if (product.id === Number(id)) {
-                    filtered = product;
-                  }
+          
+          while (url && !filtered) {
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            if (data?.results) {
+              data.results.forEach((category) => {
+                category.sub_categories?.forEach((subCategory) => {
+                  subCategory.products?.forEach((product) => {
+                    if (product.id === Number(id)) {
+                      filtered = product;
+                    }
+                  });
                 });
               });
-            });
+              url = data.next;
+            } else {
+              url = null;
+            }
           }
 
           // Fallback to local data if not found in API
