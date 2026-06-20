@@ -5,13 +5,41 @@ import Logo from "../../ui(reusable)/Logo";
 import ShoppingCard from "./ShoppingCard";
 import NavbarSmOrMd from "../navbar/NavbarSmOrMd";
 import ButtonWrapper from "../../ui(reusable)/ButtonWrapper";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import SignInOut from "./SignInUp";
 import Link from "next/link";
 import AuthBtn from "../../ui(reusable)/AuthBtn";
+import { useEffect } from "react";
+import { authData } from "../../../redux/fecher/auth/AtuthSlice";
 
 const Header = ({ drawerItems }) => {
   const user = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (token && !user?.fullName) {
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/`, {
+            headers: { "Authorization": `Bearer ${token}` }
+          });
+          const result = await res.json();
+          if (res.ok && result.success && result.data && result.data.length > 0) {
+            const profile = result.data[0];
+            dispatch(authData({
+              firstName: profile.first_name || "User",
+              lastName: profile.last_name || "",
+              email: profile.user?.email || ""
+            }));
+          }
+        } catch (e) {
+          console.error("Failed to restore user session:", e);
+        }
+      }
+    };
+    fetchUser();
+  }, [dispatch, user?.fullName]);
 
   return (
     <>
