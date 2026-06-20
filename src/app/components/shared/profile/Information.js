@@ -5,8 +5,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import Link from "next/link";
 import Title from "../../ui(reusable)/Title";
 import { profileInformationSchema } from "../forms/schema/profilePageSchemas/ProfileInformationSchema";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { authData } from "../../../redux/fecher/auth/AtuthSlice";
 
 const Information = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const [isSigningOut, setIsSigningOut] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -106,17 +112,17 @@ const Information = () => {
       actions.setSubmitting(false);
       return;
     }
-    
+
     try {
       const token = localStorage.getItem("accessToken");
-      
+
       const formData = new FormData();
       formData.append("first_name", values.firstName);
       formData.append("last_name", values.lastName);
       formData.append("bio", values.bio);
       formData.append("location", values.location);
       formData.append("contact_number", values.contactNumber);
-      
+
       if (values.birthDate) {
         // Convert DD/MM/YYYY to YYYY-MM-DD
         const parts = values.birthDate.split("/");
@@ -151,6 +157,43 @@ const Information = () => {
       showToast("An error occurred while updating profile", "error");
     } finally {
       actions.setSubmitting(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+
+      if (accessToken && refreshToken) {
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signout/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+          },
+          body: JSON.stringify({ refresh_token: refreshToken })
+        });
+      }
+
+      // Regardless of API success, clear local storage and state
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      dispatch(authData({ firstName: null, lastName: null, email: null }));
+      
+      document.getElementById('signout_modal').close();
+      showToast("User logged out successfully", "success");
+      
+      setTimeout(() => {
+        router.push("/signin");
+      }, 1000);
+
+    } catch (error) {
+      console.error("Logout error:", error);
+      showToast("Error during sign out", "error");
+      setIsSigningOut(false);
+      document.getElementById('signout_modal').close();
     }
   };
 
@@ -422,7 +465,7 @@ const Information = () => {
                   </div>
 
                   {/* Save Button */}
-                  <div className="flex justify-end pt-4">
+                  <div className="flex justify-end gap-4 pt-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
@@ -456,6 +499,76 @@ const Information = () => {
                         "SAVE"
                       )}
                     </button>
+                    <button
+                      type="button"
+                      disabled={isSigningOut || isSubmitting}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        document.getElementById('signout_modal').showModal();
+                      }}
+                      className="px-8 py-2.5 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Signing Out...
+                        </span>
+                      ) : (
+                        "Signout"
+                      )}
+                    </button>
+                    {/* <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="px-8 py-2.5 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isSubmitting ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          Deleting...
+                        </span>
+                      ) : (
+                        "Delete Account"
+                      )}
+                    </button> */}
                   </div>
                 </div>
               </div>
@@ -501,6 +614,22 @@ const Information = () => {
           </div>
         </div>
       )}
+
+      {/* DaisyUI Sign Out Modal */}
+      <dialog id="signout_modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-white">
+          <h3 className="font-bold text-lg text-gray-900">Sign Out</h3>
+          <p className="py-4 text-gray-600">Are you sure you want to sign out of your account?</p>
+          <div className="modal-action">
+            <form method="dialog">
+              <button className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 border-none mr-2">No, Cancel</button>
+            </form>
+            <button className="btn bg-red-500 text-white hover:bg-red-600 border-none" onClick={handleSignOut} disabled={isSigningOut}>
+              {isSigningOut ? "Signing Out..." : "Yes, Sign Out"}
+            </button>
+          </div>
+        </div>
+      </dialog>
     </>
   );
 };
