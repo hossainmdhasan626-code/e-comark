@@ -5,7 +5,6 @@ const Navbar = ({ navbarItems }) => {
     // eiNavbarTaDefaultSmScreeneDekhaJabeSuduMdTeiDekhaJave
     <div className="hidden md:block">
       <WrapperWithMainColor>
-        {/* flex-wrap ব্যবহার করা হয়েছে যাতে জায়গা না হলে মেনু নিচে নেমে আসে */}
         <div className="flex flex-wrap items-center gap-3 py-2">
           {/* Home Icon */}
           <div className="btn bg-mainColor border-2 border-white hover:bg-[#1a1a1a] transition-all">
@@ -36,7 +35,6 @@ const Navbar = ({ navbarItems }) => {
                     <summary className="btn border-2 border-white bg-mainColor text-white hover:bg-[#1a1a1a] transition-all flex items-center gap-1">
                       {item?.name}
                     </summary>
-                    {/* z-index বাড়ানো হয়েছে যাতে নিচের মেনুর ওপর ড্রপডাউন দেখা যায় */}
                     <ul className="bg-mainColor border-2 border-white text-white p-2 rounded-box min-w-[12rem] z-[100] mt-2">
                       {item.children.map((childItem) => (
                         <li
