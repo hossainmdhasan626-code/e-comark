@@ -22,10 +22,17 @@ const Information = () => {
     firstName: "",
     lastName: "",
     email: "",
+    bio: "",
+    location: "",
+    contactNumber: "",
     password: "",
     newPassword: "",
     birthDate: "",
+    id: null,
   });
+
+  const [previewImage, setPreviewImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -59,10 +66,19 @@ const Information = () => {
             firstName: profile.first_name || "",
             lastName: profile.last_name || "",
             email: profile.user?.email || "",
+            bio: profile.bio || "",
+            location: profile.location || "",
+            contactNumber: profile.contact_number || "",
             password: "",
             newPassword: "",
             birthDate: formattedDate,
+            id: profile.id,
           });
+
+          if (profile.profile_image) {
+            const domain = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL.replace('/api/v1', '') : 'http://127.0.0.1:8000';
+            setPreviewImage(profile.profile_image.startsWith("http") ? profile.profile_image : `${domain}${profile.profile_image}`);
+          }
         } else {
           showToast(result.message || "Failed to load profile", "error");
         }
@@ -76,12 +92,66 @@ const Information = () => {
     fetchProfile();
   }, []);
 
-  const handleSubmit = (values, actions) => {
-    console.log("Submitting form:", values);
-    setTimeout(() => {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const handleSubmit = async (values, actions) => {
+    if (!values.id) {
+      showToast("Profile ID is missing. Please refresh the page.", "error");
       actions.setSubmitting(false);
-      alert("Information saved successfully!");
-    }, 1500);
+      return;
+    }
+    
+    try {
+      const token = localStorage.getItem("accessToken");
+      
+      const formData = new FormData();
+      formData.append("first_name", values.firstName);
+      formData.append("last_name", values.lastName);
+      formData.append("bio", values.bio);
+      formData.append("location", values.location);
+      formData.append("contact_number", values.contactNumber);
+      
+      if (values.birthDate) {
+        // Convert DD/MM/YYYY to YYYY-MM-DD
+        const parts = values.birthDate.split("/");
+        if (parts.length === 3) {
+          formData.append("birth_date", `${parts[2]}-${parts[1]}-${parts[0]}`);
+        } else {
+          formData.append("birth_date", values.birthDate);
+        }
+      }
+
+      if (selectedImage) {
+        formData.append("profile_image", selectedImage);
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/${values.id}/`, {
+        method: "PUT",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        showToast("Profile updated successfully", "success");
+      } else {
+        showToast(result.message || "Failed to update profile", "error");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      showToast("An error occurred while updating profile", "error");
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -110,6 +180,30 @@ const Information = () => {
               {/* Main Container */}
               <div className="bg-white rounded-lg border-2 border-gray-200 p-6 md:p-8">
                 <div className="space-y-6">
+                  {/* Profile Image */}
+                  <div className="flex flex-col md:flex-row md:items-center gap-4 border-b border-gray-200 pb-6">
+                    <label className="md:w-32 font-semibold text-gray-900">
+                      Profile Image
+                    </label>
+                    <div className="flex items-center gap-6">
+                      <div className="relative w-24 h-24 rounded-full border-2 border-gray-200 overflow-hidden bg-gray-100 flex items-center justify-center">
+                        {previewImage ? (
+                          <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                          <svg className="w-12 h-12 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="px-4 py-2 bg-mainColor text-white text-sm font-semibold rounded-lg cursor-pointer hover:bg-orange-600 transition-colors inline-block text-center">
+                          Change Photo
+                          <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                        </label>
+                        <p className="text-xs text-gray-500">JPG, GIF or PNG. Max size of 800K</p>
+                      </div>
+                    </div>
+                  </div>
                   {/* Social Title */}
                   <div className="flex flex-col md:flex-row md:items-center gap-4">
                     <label className="md:w-32 font-semibold text-gray-900">
@@ -192,6 +286,52 @@ const Information = () => {
                         name="email"
                         component="p"
                         className="text-red-500 text-xs mt-1.5"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Bio */}
+                  <div className="flex flex-col md:flex-row md:items-start gap-4">
+                    <label className="md:w-32 font-semibold text-gray-900 md:pt-3">
+                      Bio
+                    </label>
+                    <div className="flex-1">
+                      <Field
+                        as="textarea"
+                        name="bio"
+                        placeholder="Tell us about yourself..."
+                        rows="3"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200 resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Location */}
+                  <div className="flex flex-col md:flex-row md:items-start gap-4">
+                    <label className="md:w-32 font-semibold text-gray-900 md:pt-3">
+                      Location
+                    </label>
+                    <div className="flex-1">
+                      <Field
+                        type="text"
+                        name="location"
+                        placeholder="e.g. New York, NY"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contact Number */}
+                  <div className="flex flex-col md:flex-row md:items-start gap-4">
+                    <label className="md:w-32 font-semibold text-gray-900 md:pt-3">
+                      Contact
+                    </label>
+                    <div className="flex-1">
+                      <Field
+                        type="tel"
+                        name="contactNumber"
+                        placeholder="+1-123-456-7890"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 transition-all duration-200"
                       />
                     </div>
                   </div>
