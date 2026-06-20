@@ -54,7 +54,7 @@ const SignUpFrom = () => {
         showToast("Account created successfully", "success");
         dispatch(authData(values));
         actions.resetForm();
-        setTimeout(() => router.push("/"), 1500); // Or redirect to sign-in page if preferred
+        setTimeout(() => router.push("/signin"), 1500); // Redirect to sign-in page
       } else {
         showToast(data.message || "Failed to create account. Please check the form fields.", "error");
         if (data.errors) {

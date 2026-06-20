@@ -5,9 +5,12 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "./schema/SignInSchema";
+import { useDispatch } from "react-redux";
+import { authData } from "@/app/redux/fecher/auth/AtuthSlice";
 
 const SignInForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", type: "info" });
 
@@ -44,6 +47,9 @@ const SignInForm = () => {
           localStorage.setItem("refreshToken", data.refresh);
         }
         
+        // Dispatch to Redux to update UI state
+        dispatch(authData({ firstName: "User", lastName: "", email: values.email }));
+
         actions.resetForm();
         setTimeout(() => router.push("/"), 1500); // Redirect to home page
       } else {
