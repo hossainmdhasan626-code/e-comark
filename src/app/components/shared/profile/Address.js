@@ -262,7 +262,7 @@ const Address = () => {
                       }}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
                     >
-                      <option value="">Select City / Division</option>
+                      <option value="">Select City</option>
                       {values.country &&
                         Object.keys(locationData[values.country]?.cities || {}).map((city) => (
                           <option key={city} value={city}>
