@@ -121,8 +121,12 @@ const Address = () => {
   // rtkQueryHooks
   const [addAddress] = useAddAddressMutation();
   const [updateAddress] = useUpdateAddressMutation();
-  const { data } = useGetAddressQuery();
+  const { data, refetch } = useGetAddressQuery();
   const [deleteAddress] = useDeleteAddressMutation();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   const initialValues = {
     address: "",
