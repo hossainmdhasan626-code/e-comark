@@ -10,7 +10,6 @@ import {
   useGetAddressQuery,
   useUpdateAddressMutation,
 } from "@/app/redux/api/user/AddressApi";
-import { profileDemoAddress } from "../../../../../data/profilePage/ProfilePageDemoAddress";
 
 const locationData = {
   Bangladesh: {
@@ -111,6 +110,13 @@ const locationData = {
 const Address = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: "", type: "info" });
+  const [addressToDelete, setAddressToDelete] = useState(null);
+
+  const showToast = (message, type = "error") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "info" }), 3000);
+  };
 
   // rtkQueryHooks
   const [addAddress] = useAddAddressMutation();
@@ -129,20 +135,20 @@ const Address = () => {
     mobilePhone: "",
   };
 
-  // dataNaThakleDemoDataDibe
-  const displayData = data && data.length > 0 ? data : profileDemoAddress;
+  // dataNaThakleKhaliArrayDibe
+  const displayData = data || [];
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       if (editingAddress) {
         //updateAddredd
         await updateAddress({ ...values, id: editingAddress.id }).unwrap();
-        alert(JSON.stringify(values, null, 2));
+        showToast("Address updated successfully", "success");
         console.log("Updated Values:", values);
       } else {
         //addAddress
-        await addAddress({ ...values, id: Date.now() }).unwrap();
-        alert(JSON.stringify(values, null, 2));
+        await addAddress(values).unwrap();
+        showToast("Address added successfully", "success");
         console.log("New Values:", values);
       }
 
@@ -151,6 +157,7 @@ const Address = () => {
       resetForm();
     } catch (error) {
       console.error("Error saving address:", error);
+      showToast(error?.data?.message || "Failed to save address", "error");
     } finally {
       setSubmitting(false);
     }
@@ -161,11 +168,28 @@ const Address = () => {
     setIsFormVisible(true);
   };
 
-  const handleDelete = (address) => {
-    if (confirm("Are you sure you want to delete this address?")) {
-      // deleteLojicEkhaneHobe
-      deleteAddress(address.id);
+  const handleDeleteClick = (address) => {
+    setAddressToDelete(address);
+    document.getElementById("delete_address_modal").showModal();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!addressToDelete) return;
+    try {
+      await deleteAddress(addressToDelete.id).unwrap();
+      showToast("Address deleted successfully", "success");
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      showToast("Failed to delete address", "error");
+    } finally {
+      document.getElementById("delete_address_modal").close();
+      setAddressToDelete(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    document.getElementById("delete_address_modal").close();
+    setAddressToDelete(null);
   };
 
   const handleSetDefault = (id) => {
@@ -263,12 +287,17 @@ const Address = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
                     >
                       <option value="">Select City</option>
-                      {values.country &&
-                        Object.keys(locationData[values.country]?.cities || {}).map((city) => (
+                      {(() => {
+                        const cities = values.country ? Object.keys(locationData[values.country]?.cities || {}) : [];
+                        if (values.city && !cities.includes(values.city)) {
+                          cities.push(values.city);
+                        }
+                        return cities.map((city) => (
                           <option key={city} value={city}>
                             {city}
                           </option>
-                        ))}
+                        ));
+                      })()}
                     </Field>
                     <ErrorMessage
                       name="city"
@@ -296,12 +325,17 @@ const Address = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
                     >
                       <option value="">Select District</option>
-                      {values.country && values.city &&
-                        Object.keys(locationData[values.country]?.cities[values.city]?.districts || {}).map((dist) => (
+                      {(() => {
+                        const districts = (values.country && values.city) ? Object.keys(locationData[values.country]?.cities[values.city]?.districts || {}) : [];
+                        if (values.district && !districts.includes(values.district)) {
+                          districts.push(values.district);
+                        }
+                        return districts.map((dist) => (
                           <option key={dist} value={dist}>
                             {dist}
                           </option>
-                        ))}
+                        ));
+                      })()}
                     </Field>
                     <ErrorMessage
                       name="district"
@@ -324,12 +358,17 @@ const Address = () => {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
                     >
                       <option value="">Select Upazila / Area</option>
-                      {values.country && values.city && values.district &&
-                        locationData[values.country]?.cities[values.city]?.districts[values.district]?.map((upz) => (
+                      {(() => {
+                        const upazilas = (values.country && values.city && values.district) ? (locationData[values.country]?.cities[values.city]?.districts[values.district] || []) : [];
+                        if (values.upazila && !upazilas.includes(values.upazila)) {
+                          upazilas.push(values.upazila);
+                        }
+                        return upazilas.map((upz) => (
                           <option key={upz} value={upz}>
                             {upz}
                           </option>
-                        ))}
+                        ));
+                      })()}
                     </Field>
                     <ErrorMessage
                       name="upazila"
@@ -496,32 +535,30 @@ const Address = () => {
                 </div>
                 <div className="flex gap-2">
                   {/* editBtnIcon */}
-                  {data && data.length > 0 ? (
-                    <button
-                      onClick={() => handleEdit(addr)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Edit"
+                  <button
+                    onClick={() => handleEdit(addr)}
+                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Edit"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-5 h-5"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                        />
-                      </svg>
-                    </button>
-                  ) : null}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                      />
+                    </svg>
+                  </button>
 
                   {/* deleteBtnIcon */}
                   <button
-                    onClick={() => handleDelete(addr.id)}
+                    onClick={() => handleDeleteClick(addr)}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     title="Delete"
                   >
@@ -640,6 +677,34 @@ const Address = () => {
           Home
         </Link>
       </div>
+      {toast.show && (
+        <div className="toast toast-top toast-end z-50">
+          <div className={`alert ${toast.type === "success" ? "alert-success text-white" : "alert-error text-white"}`}>
+            <span>{toast.message}</span>
+          </div>
+        </div>
+      )}
+      {/* DaisyUI Delete Confirmation Modal */}
+      <dialog id="delete_address_modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-white">
+          <h3 className="font-bold text-lg text-gray-900">Delete Address</h3>
+          <p className="py-4 text-gray-600">Are you sure you want to delete this address?</p>
+          <div className="modal-action">
+            <button
+              onClick={handleCancelDelete}
+              className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 border-none mr-2 font-semibold"
+            >
+              No, Cancel
+            </button>
+            <button
+              className="btn bg-red-500 text-white hover:bg-red-600 border-none font-semibold"
+              onClick={handleConfirmDelete}
+            >
+              Yes, Delete
+            </button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
