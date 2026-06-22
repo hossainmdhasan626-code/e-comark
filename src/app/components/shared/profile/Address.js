@@ -278,10 +278,10 @@ const Address = () => {
                   </div>
                 </div>
 
-                {/* District / County */}
+                {/* District */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    District / County
+                    District
                   </label>
                   <div className="flex-1">
                     <Field
@@ -295,7 +295,7 @@ const Address = () => {
                       }}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
                     >
-                      <option value="">Select District / County</option>
+                      <option value="">Select District</option>
                       {values.country && values.city &&
                         Object.keys(locationData[values.country]?.cities[values.city]?.districts || {}).map((dist) => (
                           <option key={dist} value={dist}>
@@ -314,7 +314,7 @@ const Address = () => {
                 {/* Upazila / Sub-district / Area */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Upazila / Area
+                    Upazila
                   </label>
                   <div className="flex-1">
                     <Field
