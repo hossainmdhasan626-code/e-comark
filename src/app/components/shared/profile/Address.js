@@ -342,7 +342,7 @@ const Address = () => {
                 {/* Address */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Address
+                    Street
                   </label>
                   <div className="flex-1">
                     <Field
@@ -362,7 +362,7 @@ const Address = () => {
                 {/* Address Line 2 */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Address Line 2
+                    Street 2
                   </label>
                   <div className="flex-1">
                     <Field
