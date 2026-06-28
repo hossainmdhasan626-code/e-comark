@@ -128,7 +128,7 @@ const ProductDetails = ({ params }) => {
                   />
                 </div>
               ))}
-            </div> */
+            </div> */}
           </div>
 
           <div className="md:w-1/2 p-8 self-center">
