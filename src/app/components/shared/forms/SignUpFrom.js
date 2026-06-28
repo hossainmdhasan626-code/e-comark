@@ -13,6 +13,12 @@ const SignUpFrom = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "", type: "info" });
+
+  const showToast = (message, type = "error") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "info" }), 3000);
+  };
 
   const signInFromData = {
     firstName: "",
@@ -24,11 +30,47 @@ const SignUpFrom = () => {
     terms: false,
   };
 
-  const handleSubmit = (values, actions) => {
-    console.log("submitting");
-    dispatch(authData(values));
-    actions.resetForm();
-    router.push("/");
+  const handleSubmit = async (values, actions) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signup/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+          profile: {
+            first_name: values.firstName,
+            last_name: values.lastName,
+            contact_number: values.number,
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        showToast("Account created successfully", "success");
+        dispatch(authData(values));
+        actions.resetForm();
+        setTimeout(() => router.push("/signin"), 1500); // Redirect to sign-in page
+      } else {
+        showToast(data.message || "Failed to create account. Please check the form fields.", "error");
+        if (data.errors) {
+          const formikErrors = {};
+          for (const key in data.errors) {
+            formikErrors[key] = Array.isArray(data.errors[key]) ? data.errors[key].join(" ") : data.errors[key];
+          }
+          actions.setErrors(formikErrors);
+        }
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      showToast("An error occurred. Please check your connection and try again.", "error");
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   const onClickGoogle = () => {
@@ -40,6 +82,7 @@ const SignUpFrom = () => {
   };
 
   return (
+    <>
     <Formik
       initialValues={signInFromData}
       validationSchema={signUpSchema}
@@ -310,6 +353,14 @@ const SignUpFrom = () => {
         </div>
       )}
     </Formik>
+    {toast.show && (
+      <div className="toast toast-top toast-end z-50">
+        <div className={`alert ${toast.type === "success" ? "alert-success text-white" : "alert-error text-white"}`}>
+          <span>{toast.message}</span>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 

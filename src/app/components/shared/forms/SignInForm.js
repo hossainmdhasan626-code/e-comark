@@ -5,20 +5,69 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { signInSchema } from "./schema/SignInSchema";
+import { useDispatch } from "react-redux";
+import { authData } from "@/app/redux/fecher/auth/AtuthSlice";
 
 const SignInForm = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const [toast, setToast] = useState({ show: false, message: "", type: "info" });
+
+  const showToast = (message, type = "error") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "info" }), 3000);
+  };
 
   const initialValues = {
     email: "",
     password: "",
   };
 
-  const handleSubmit = (values, actions) => {
-    console.log("Logging in with:", values);
-    actions.setSubmitting(false);
-    router.push("/");
+  const handleSubmit = async (values, actions) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signin/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.access) {
+        showToast("Signed in successfully", "success");
+        // Store tokens
+        localStorage.setItem("accessToken", data.access);
+        if (data.refresh) {
+          localStorage.setItem("refreshToken", data.refresh);
+        }
+        
+        // Dispatch to Redux to update UI state
+        dispatch(authData({ firstName: "User", lastName: "", email: values.email }));
+
+        actions.resetForm();
+        setTimeout(() => router.push("/"), 1500); // Redirect to home page
+      } else {
+        showToast(data.message || data.detail || "Failed to sign in. Please check your credentials.", "error");
+        if (data.errors) {
+          const formikErrors = {};
+          for (const key in data.errors) {
+            formikErrors[key] = Array.isArray(data.errors[key]) ? data.errors[key].join(" ") : data.errors[key];
+          }
+          actions.setErrors(formikErrors);
+        }
+      }
+    } catch (error) {
+      console.error("Signin error:", error);
+      showToast("An error occurred. Please check your connection and try again.", "error");
+    } finally {
+      actions.setSubmitting(false);
+    }
   };
 
   const onClickGoogle = () => {
@@ -30,6 +79,7 @@ const SignInForm = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col items-center justify-center w-full relative z-10">
       <div className="w-full bg-white/80 backdrop-blur-2xl rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-white/50 dark:bg-gray-900/80 dark:border-gray-700/50">
         <div className="p-8 sm:p-10 space-y-8">
@@ -221,6 +271,14 @@ const SignInForm = () => {
         </div>
       </div>
     </div>
+    {toast.show && (
+      <div className="toast toast-top toast-end z-50">
+        <div className={`alert ${toast.type === "success" ? "alert-success text-white" : "alert-error text-white"}`}>
+          <span>{toast.message}</span>
+        </div>
+      </div>
+    )}
+    </>
   );
 };
 
