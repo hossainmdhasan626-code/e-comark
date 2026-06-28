@@ -5,7 +5,29 @@ import NavbarAndSidbarSmItems from "../../../data/NavbarAndSidbarSmItems";
 import { Suspense } from "react";
 import SidbarAndMainContaintForFetchData from "../components/shared/rootLayoutOfMainContaintSidbarAndContact/SidbarAndMainContaintForFetchData";
 
-const layout = ({ children }) => {
+const layout = async ({ children }) => {
+  let dynamicSidbar = SidbarForSm;
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://127.0.0.1:8000/api/v1";
+    const res = await fetch(`${baseUrl}/product-category/`, { cache: 'no-store' });
+    const data = await res.json();
+    if (data?.results) {
+      dynamicSidbar = data.results.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        type: "CATEGORY",
+        children: cat.sub_categories?.map(sub => ({
+          id: sub.id,
+          name: sub.name,
+          type: "SUBCATEGORY",
+          parentId: cat.id
+        }))
+      }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch categories for sidebar:", error);
+  }
+
   return (
     <>
       <Header drawerItems={NavbarAndSidbarSmItems} />
@@ -13,7 +35,13 @@ const layout = ({ children }) => {
       {/* sidbarAndMainContaintErModdeiMainContaintBaChildrenJacche
       KenoNaEiLayoutTaAroOnekSthaneiUseKoraHobe */}
       <Suspense fallback={<div>Loading Navigation...</div>}>
-        <SidbarAndMainContaintForFetchData mainContaint={children} />
+        <SidbarAndMainContaint
+          breadcrumbs={[
+            { label: "Home", link: "/" },
+          ]}
+          sidbarContaint={dynamicSidbar}
+          mainContaint={children}
+        />
       </Suspense>
       {/* footer */}
       <FooterComponent />

@@ -10,46 +10,149 @@ import {
   useGetAddressQuery,
   useUpdateAddressMutation,
 } from "@/app/redux/api/user/AddressApi";
-import { profileDemoAddress } from "../../../../../data/profilePage/ProfilePageDemoAddress";
+
+const locationData = {
+  Bangladesh: {
+    cities: {
+      Dhaka: {
+        districts: {
+          Dhaka: ["Dhamrai", "Dohar", "Keraniganj", "Nawabganj", "Savar"],
+          Gazipur: ["Gazipur Sadar", "Kaliakair", "Kaliganj", "Kapasia", "Sreepur"],
+          Narayanganj: ["Araihazar", "Bandar", "Narayanganj Sadar", "Rupganj", "Sonargaon"],
+        }
+      },
+      Chittagong: {
+        districts: {
+          Chittagong: ["Anwara", "Banshkhali", "Boalkhali", "Hathazari", "Mirsarai", "Patiya", "Rangunia"],
+          CoxsBazar: ["Coxs Bazar Sadar", "Chakaria", "Kutubdia", "Ramu", "Teknaf", "Ukhiya"],
+        }
+      },
+      Sylhet: {
+        districts: {
+          Sylhet: ["Sylhet Sadar", "Beanibazar", "Bishwanath", "Fenchuganj", "Golapganj", "Jaintiapur"],
+          Moulvibazar: ["Moulvibazar Sadar", "Barlekha", "Kamalganj", "Kulaura", "Rajnagar", "Sreemangal"],
+        }
+      }
+    }
+  },
+  India: {
+    cities: {
+      Maharashtra: {
+        districts: {
+          Mumbai: ["Mumbai City", "Mumbai Suburban", "Colaba", "Bandra"],
+          Pune: ["Pune City", "Baramati", "Haveli", "Shirur"],
+        }
+      },
+      Delhi: {
+        districts: {
+          "New Delhi": ["Connaught Place", "Chanakyapuri", "Dwarka"],
+          "South Delhi": ["Saket", "Hauz Khas", "Greater Kailash"],
+        }
+      },
+      "West Bengal": {
+        districts: {
+          Kolkata: ["Alipore", "Salt Lake", "Ballygunge"],
+          Howrah: ["Howrah Sadar", "Bally", "Uluberia"],
+        }
+      }
+    }
+  },
+  Pakistan: {
+    cities: {
+      Sindh: {
+        districts: {
+          Karachi: ["Karachi East", "Karachi West", "Karachi South", "Karachi Central"],
+          Hyderabad: ["Hyderabad City", "Latifabad", "Qasimabad"],
+        }
+      },
+      Punjab: {
+        districts: {
+          Lahore: ["Lahore City", "Lahore Cantonment", "Model Town"],
+          Faisalabad: ["Faisalabad City", "Faisalabad Sadar", "Jaranwala"],
+        }
+      }
+    }
+  },
+  USA: {
+    cities: {
+      California: {
+        districts: {
+          "Los Angeles County": ["Los Angeles", "Pasadena", "Glendale", "Santa Monica"],
+          "San Francisco County": ["San Francisco", "SOMA", "Mission", "Marina"],
+        }
+      },
+      "New York": {
+        districts: {
+          "New York County": ["Manhattan", "Harlem", "Chelsea"],
+          "Kings County": ["Brooklyn", "Williamsburg", "DUMBO"],
+        }
+      }
+    }
+  },
+  UK: {
+    cities: {
+      England: {
+        districts: {
+          GreaterLondon: ["City of London", "Westminster", "Camden", "Greenwich"],
+          GreaterManchester: ["Manchester", "Salford", "Trafford", "Bolton"],
+        }
+      },
+      Scotland: {
+        districts: {
+          Glasgow: ["Glasgow City", "West End", "East End"],
+          Edinburgh: ["Edinburgh City", "Old Town", "New Town"],
+        }
+      }
+    }
+  }
+};
 
 const Address = () => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editingAddress, setEditingAddress] = useState(null);
+  const [toast, setToast] = useState({ show: false, message: "", type: "info" });
+  const [addressToDelete, setAddressToDelete] = useState(null);
+
+  const showToast = (message, type = "error") => {
+    setToast({ show: true, message, type });
+    setTimeout(() => setToast({ show: false, message: "", type: "info" }), 3000);
+  };
 
   // rtkQueryHooks
   const [addAddress] = useAddAddressMutation();
   const [updateAddress] = useUpdateAddressMutation();
-  const { data } = useGetAddressQuery();
+  const { data, refetch } = useGetAddressQuery();
   const [deleteAddress] = useDeleteAddressMutation();
 
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   const initialValues = {
-    alias: "",
-    firstName: "",
-    lastName: "",
-    company: "",
     address: "",
     addressLine2: "",
     zipCode: "",
     city: "",
+    district: "",
+    upazila: "",
     country: "Bangladesh",
     mobilePhone: "",
-    phone: "",
   };
 
-  // dataNaThakleDemoDataDibe
-  const displayData = data && data.length > 0 ? data : profileDemoAddress;
+  // dataNaThakleKhaliArrayDibe
+  const displayData = data || [];
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
       if (editingAddress) {
         //updateAddredd
         await updateAddress({ ...values, id: editingAddress.id }).unwrap();
-        alert(JSON.stringify(values, null, 2));
+        showToast("Address updated successfully", "success");
         console.log("Updated Values:", values);
       } else {
         //addAddress
-        await addAddress({ ...values, id: Date.now() }).unwrap();
-        alert(JSON.stringify(values, null, 2));
+        await addAddress(values).unwrap();
+        showToast("Address added successfully", "success");
         console.log("New Values:", values);
       }
 
@@ -58,6 +161,7 @@ const Address = () => {
       resetForm();
     } catch (error) {
       console.error("Error saving address:", error);
+      showToast(error?.data?.message || "Failed to save address", "error");
     } finally {
       setSubmitting(false);
     }
@@ -68,11 +172,28 @@ const Address = () => {
     setIsFormVisible(true);
   };
 
-  const handleDelete = (address) => {
-    if (confirm("Are you sure you want to delete this address?")) {
-      // deleteLojicEkhaneHobe
-      deleteAddress(address.id);
+  const handleDeleteClick = (address) => {
+    setAddressToDelete(address);
+    document.getElementById("delete_address_modal").showModal();
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!addressToDelete) return;
+    try {
+      await deleteAddress(addressToDelete.id).unwrap();
+      showToast("Address deleted successfully", "success");
+    } catch (error) {
+      console.error("Error deleting address:", error);
+      showToast("Failed to delete address", "error");
+    } finally {
+      document.getElementById("delete_address_modal").close();
+      setAddressToDelete(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    document.getElementById("delete_address_modal").close();
+    setAddressToDelete(null);
   };
 
   const handleSetDefault = (id) => {
@@ -113,84 +234,148 @@ const Address = () => {
             onSubmit={handleSubmit}
             enableReinitialize
           >
-            {({ isSubmitting }) => (
+            {({ isSubmitting, values, setFieldValue }) => (
               <Form className="space-y-6">
-                {/* Alias */}
+
+
+
+                {/* Country */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Alias
+                    Country
                   </label>
                   <div className="flex-1">
                     <Field
-                      type="text"
-                      name="alias"
-                      placeholder="Alias"
+                      as="select"
+                      name="country"
+                      onChange={(e) => {
+                        const newCountry = e.target.value;
+                        setFieldValue("country", newCountry);
+                        setFieldValue("city", "");
+                        setFieldValue("district", "");
+                        setFieldValue("upazila", "");
+                      }}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    />
-                    <p className="text-sm text-gray-600 mt-1">Optional</p>
+                    >
+                      <option value="">Select Country</option>
+                      {Object.keys(locationData).map((country) => (
+                        <option key={country} value={country}>
+                          {country}
+                        </option>
+                      ))}
+                    </Field>
                     <ErrorMessage
-                      name="alias"
+                      name="country"
                       component="p"
                       className="text-red-500 text-xs mt-1"
                     />
                   </div>
                 </div>
 
-                {/* First Name */}
+                {/* City / State / Division */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    First name
+                    City / Division
                   </label>
                   <div className="flex-1">
                     <Field
-                      type="text"
-                      name="firstName"
-                      placeholder="First name"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    />
+                      as="select"
+                      name="city"
+                      disabled={!values.country}
+                      onChange={(e) => {
+                        const newCity = e.target.value;
+                        setFieldValue("city", newCity);
+                        setFieldValue("district", "");
+                        setFieldValue("upazila", "");
+                      }}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
+                    >
+                      <option value="">Select City</option>
+                      {(() => {
+                        const cities = values.country ? Object.keys(locationData[values.country]?.cities || {}) : [];
+                        if (values.city && !cities.includes(values.city)) {
+                          cities.push(values.city);
+                        }
+                        return cities.map((city) => (
+                          <option key={city} value={city}>
+                            {city}
+                          </option>
+                        ));
+                      })()}
+                    </Field>
                     <ErrorMessage
-                      name="firstName"
+                      name="city"
                       component="p"
                       className="text-red-500 text-xs mt-1"
                     />
                   </div>
                 </div>
 
-                {/* Last Name */}
+                {/* District */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Last name
+                    District
                   </label>
                   <div className="flex-1">
                     <Field
-                      type="text"
-                      name="lastName"
-                      placeholder="Last name"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    />
+                      as="select"
+                      name="district"
+                      disabled={!values.city}
+                      onChange={(e) => {
+                        const newDistrict = e.target.value;
+                        setFieldValue("district", newDistrict);
+                        setFieldValue("upazila", "");
+                      }}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
+                    >
+                      <option value="">Select District</option>
+                      {(() => {
+                        const districts = (values.country && values.city) ? Object.keys(locationData[values.country]?.cities[values.city]?.districts || {}) : [];
+                        if (values.district && !districts.includes(values.district)) {
+                          districts.push(values.district);
+                        }
+                        return districts.map((dist) => (
+                          <option key={dist} value={dist}>
+                            {dist}
+                          </option>
+                        ));
+                      })()}
+                    </Field>
                     <ErrorMessage
-                      name="lastName"
+                      name="district"
                       component="p"
                       className="text-red-500 text-xs mt-1"
                     />
                   </div>
                 </div>
 
-                {/* Company */}
+                {/* Upazila / Sub-district / Area */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Company
+                    Upazila
                   </label>
                   <div className="flex-1">
                     <Field
-                      type="text"
-                      name="company"
-                      placeholder="Company"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    />
-                    <p className="text-sm text-gray-600 mt-1">Optional</p>
+                      as="select"
+                      name="upazila"
+                      disabled={!values.district}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900 disabled:bg-gray-100 disabled:text-gray-400"
+                    >
+                      <option value="">Select Upazila / Area</option>
+                      {(() => {
+                        const upazilas = (values.country && values.city && values.district) ? (locationData[values.country]?.cities[values.city]?.districts[values.district] || []) : [];
+                        if (values.upazila && !upazilas.includes(values.upazila)) {
+                          upazilas.push(values.upazila);
+                        }
+                        return upazilas.map((upz) => (
+                          <option key={upz} value={upz}>
+                            {upz}
+                          </option>
+                        ));
+                      })()}
+                    </Field>
                     <ErrorMessage
-                      name="company"
+                      name="upazila"
                       component="p"
                       className="text-red-500 text-xs mt-1"
                     />
@@ -200,7 +385,7 @@ const Address = () => {
                 {/* Address */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Address
+                    Street
                   </label>
                   <div className="flex-1">
                     <Field
@@ -220,7 +405,7 @@ const Address = () => {
                 {/* Address Line 2 */}
                 <div className="flex flex-col md:flex-row md:items-start gap-4">
                   <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Address Line 2
+                    Street 2
                   </label>
                   <div className="flex-1">
                     <Field
@@ -250,54 +435,8 @@ const Address = () => {
                       placeholder="Zip/Postal Code"
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
                     />
-                    <p className="text-sm text-gray-600 mt-1">Optional</p>
                     <ErrorMessage
                       name="zipCode"
-                      component="p"
-                      className="text-red-500 text-xs mt-1"
-                    />
-                  </div>
-                </div>
-
-                {/* City */}
-                <div className="flex flex-col md:flex-row md:items-start gap-4">
-                  <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    City
-                  </label>
-                  <div className="flex-1">
-                    <Field
-                      type="text"
-                      name="city"
-                      placeholder="City"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    />
-                    <ErrorMessage
-                      name="city"
-                      component="p"
-                      className="text-red-500 text-xs mt-1"
-                    />
-                  </div>
-                </div>
-
-                {/* Country */}
-                <div className="flex flex-col md:flex-row md:items-start gap-4">
-                  <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Country
-                  </label>
-                  <div className="flex-1">
-                    <Field
-                      as="select"
-                      name="country"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    >
-                      <option value="Bangladesh">Bangladesh</option>
-                      <option value="India">India</option>
-                      <option value="Pakistan">Pakistan</option>
-                      <option value="USA">USA</option>
-                      <option value="UK">UK</option>
-                    </Field>
-                    <ErrorMessage
-                      name="country"
                       component="p"
                       className="text-red-500 text-xs mt-1"
                     />
@@ -318,27 +457,6 @@ const Address = () => {
                     />
                     <ErrorMessage
                       name="mobilePhone"
-                      component="p"
-                      className="text-red-500 text-xs mt-1"
-                    />
-                  </div>
-                </div>
-
-                {/* Phone */}
-                <div className="flex flex-col md:flex-row md:items-start gap-4">
-                  <label className="md:w-48 font-semibold text-gray-900 md:pt-3">
-                    Phone
-                  </label>
-                  <div className="flex-1">
-                    <Field
-                      type="tel"
-                      name="phone"
-                      placeholder="Phone"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-mainColor focus:border-mainColor bg-white text-gray-900"
-                    />
-                    <p className="text-sm text-gray-600 mt-1">Optional</p>
-                    <ErrorMessage
-                      name="phone"
                       component="p"
                       className="text-red-500 text-xs mt-1"
                     />
@@ -400,11 +518,10 @@ const Address = () => {
           {displayData.map((addr) => (
             <div
               key={addr.id}
-              className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 ${
-                addr.isDefault
-                  ? "border-mainColor shadow-lg"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
+              className={`bg-white rounded-lg border-2 p-6 transition-all duration-200 ${addr.isDefault
+                ? "border-mainColor shadow-lg"
+                : "border-gray-200 hover:border-gray-300"
+                }`}
             >
               {/* Address Header */}
               <div className="flex justify-between items-start mb-4">
@@ -422,32 +539,30 @@ const Address = () => {
                 </div>
                 <div className="flex gap-2">
                   {/* editBtnIcon */}
-                  {data && data.length > 0 ? (
-                    <button
-                      onClick={() => handleEdit(addr)}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                      title="Edit"
+                  <button
+                    onClick={() => handleEdit(addr)}
+                    className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="Edit"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2}
+                      stroke="currentColor"
+                      className="w-5 h-5"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
-                        />
-                      </svg>
-                    </button>
-                  ) : null}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                      />
+                    </svg>
+                  </button>
 
                   {/* deleteBtnIcon */}
                   <button
-                    onClick={() => handleDelete(addr.id)}
+                    onClick={() => handleDeleteClick(addr)}
                     className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     title="Delete"
                   >
@@ -471,26 +586,24 @@ const Address = () => {
 
               {/* Address Details */}
               <div className="space-y-2 text-gray-700">
-                <p className="font-semibold text-gray-900">
-                  {addr.firstName} {addr.lastName}
-                </p>
-                {addr.company && <p>{addr.company}</p>}
+                {(addr.firstName || addr.lastName) && (
+                  <p className="font-semibold text-gray-900">
+                    {addr.firstName} {addr.lastName}
+                  </p>
+                )}
                 <p>{addr.address}</p>
                 {addr.addressLine2 && <p>{addr.addressLine2}</p>}
                 <p>
+                  {addr.upazila && `${addr.upazila}, `}
+                  {addr.district && `${addr.district}, `}
                   {addr.city}
-                  {addr.zipCode && `, ${addr.zipCode}`}
+                  {addr.zipCode && ` - ${addr.zipCode}`}
                 </p>
                 <p>{addr.country}</p>
                 <p className="pt-2">
                   <span className="font-semibold">Mobile:</span>{" "}
                   {addr.mobilePhone}
                 </p>
-                {addr.phone && (
-                  <p>
-                    <span className="font-semibold">Phone:</span> {addr.phone}
-                  </p>
-                )}
               </div>
 
               {/* Set as Default Button */}
@@ -568,6 +681,34 @@ const Address = () => {
           Home
         </Link>
       </div>
+      {toast.show && (
+        <div className="toast toast-top toast-end z-50">
+          <div className={`alert ${toast.type === "success" ? "alert-success text-white" : "alert-error text-white"}`}>
+            <span>{toast.message}</span>
+          </div>
+        </div>
+      )}
+      {/* DaisyUI Delete Confirmation Modal */}
+      <dialog id="delete_address_modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box bg-white">
+          <h3 className="font-bold text-lg text-gray-900">Delete Address</h3>
+          <p className="py-4 text-gray-600">Are you sure you want to delete this address?</p>
+          <div className="modal-action">
+            <button
+              onClick={handleCancelDelete}
+              className="btn bg-gray-200 text-gray-800 hover:bg-gray-300 border-none mr-2 font-semibold"
+            >
+              No, Cancel
+            </button>
+            <button
+              className="btn bg-red-500 text-white hover:bg-red-600 border-none font-semibold"
+              onClick={handleConfirmDelete}
+            >
+              Yes, Delete
+            </button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

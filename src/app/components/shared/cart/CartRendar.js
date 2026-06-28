@@ -5,88 +5,70 @@ import {
   useGetProductsQuery,
 } from "@/app/redux/api/cart/cartApi";
 import Card from "../../ui(reusable)/Card";
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect, useState } from "react";
 import CartSkeleton from "../skeleton/CartSkeleton";
 import { useSearchParams } from "next/navigation";
-import IsErrorRTK from "../../ui(reusable)/IsErrorRTK";
 
 const CartRendar = () => {
-  // paramsThekeIdBerKoreFiltarKora
+  const [fetchCartData, { data, isLoading: isCartLoading }] =
+    useLazyGetProductsQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+
   const searchParams = useSearchParams();
-  const cat_Id = searchParams.get("cat_Id");
-  const sub_Id = searchParams.get("sub_Id");
-  const search_params = searchParams.get("search");
+  const categoryId = searchParams.get("category");
+  const subcategoryId = searchParams.get("subcategory");
+  const searchQuery = searchParams.get("search");
 
-  // kokhonKonApiDataAsbeTarJonno
-  const isSearching = !!search_params;
-  const isFiltaring = !!(cat_Id && sub_Id) && !isSearching;
-  const isDefault = !isSearching && !isFiltaring;
+  useEffect(() => {
+    fetchCartData({ categoryId, subcategoryId, searchQuery });
+    setCurrentPage(1);
+  }, [fetchCartData, categoryId, subcategoryId, searchQuery]);
 
-  // RTK
+  const totalPages = data ? Math.ceil(data.length / itemsPerPage) : 0;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedData = data?.slice(startIndex, startIndex + itemsPerPage);
 
-  // landingPageCartData
-  const {
-    data: cartData,
-    isLoading: isCartLoading,
-    isError,
-    error,
-  } = useGetProductsQuery(undefined, { skip: !isDefault });
-  // filtarCartData
-  const {
-    data: cartDataByFiltar,
-    isLoading: isCartDataFiltarLoading,
-    isError: isErrorFilter,
-    error: errorFilter,
-  } = useGetProductsBySubCategoryQuery(
-    { cat_Id, sub_Id },
-    { skip: !isFiltaring },
-  );
-  // searchCartData
-  const {
-    data: cartDataBySearch,
-    isLoading: isLoadingBySearch,
-    isError: isErrorSearch,
-    error: errorSearch,
-  } = useGetProductsBySearchQuery({ search_params }, { skip: !isSearching });
-
-  //
-  let data = [];
-
-  if (isFiltaring) {
-    // cartDataByFiltar
-    data = cartDataByFiltar?.results || [];
-  } else if (isSearching) {
-    // cartBySearch
-    data = cartDataBySearch?.results || [];
-  } else {
-    // landingCartData
-    data =
-      cartData?.results?.flatMap((results) =>
-        results?.sub_categories?.flatMap((pro) => pro?.products),
-      ) || [];
-  }
-
-  // sobIsErrorArErrorKeEkSatheNiyeAslam
-  const haveIsError = isError || isErrorSearch || isErrorFilter;
-  const haveError = error || errorFilter || errorSearch;
-
-  // erroHandle
-  if (haveIsError) {
-    return (
-      <IsErrorRTK
-        isError={isError || isErrorFilter || isErrorFilter}
-        error={haveError}
-      />
-    );
-  }
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div className="grid justify-center items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {isCartLoading || isCartDataFiltarLoading || isLoadingBySearch
-        ? [...Array(10)].map((_, i) => <CartSkeleton key={i} />)
-        : data?.map((item) => {
+    <div className="flex flex-col items-center w-full">
+      <div className="grid justify-center items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        {isCartLoading
+          ? [...Array(10)].map((_, i) => <CartSkeleton key={i} />)
+          : paginatedData?.map((item) => {
             return <Card key={item?.id} item={item} />;
           })}
+      </div>
+
+      {!isCartLoading && totalPages > 1 && (
+        <div className="join mt-12 mb-8">
+          <button 
+            className="join-item btn" 
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            «
+          </button>
+          
+          <button className="join-item btn pointer-events-none">
+            Page {currentPage} of {totalPages}
+          </button>
+          
+          <button 
+            className="join-item btn" 
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            »
+          </button>
+        </div>
+      )}
     </div>
   );
 };
